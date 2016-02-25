@@ -1,7 +1,9 @@
 # README #
 
 
-### This program implements the "hacking" game from Bethesda's Fallout Universe ###
+### Description ###
+
+This program implements the "hacking" game from Bethesda's Fallout Universe:
 
 Guess the password from various words on the screen.
 The program will tell you how many letters are correct and in the right place.
