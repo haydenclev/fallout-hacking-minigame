@@ -24,5 +24,5 @@ All contributions and suggestions welcome!
 
 ### Who do I talk to? ###
 
-Hayden Clevenger
+Hayden Clevenger || 
 hayden.clev@gmail.com
