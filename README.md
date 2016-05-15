@@ -16,7 +16,7 @@ I would ultimately like to implement this game using a GUI.
 
 ### How do I get set up? ###
 
-Clone repository, navigate to source folder and run "java hack".
+Clone repository, navigate to source folder, compile and execute..
 
 ### Contribution guidelines ###
 
