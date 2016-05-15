@@ -1,8 +1,10 @@
 /**
 This class executes HACKING a java/terminal window replication of the 
 popular Fallout 4 terminal hacking system.
+
 Hayden Clevenger
-Dec 12, 2015
+hayden.clev@gmail.com
+December 12, 2015
 */
 
 import java.io.File;
@@ -12,8 +14,8 @@ import java.util.Scanner;
 public class hack {
 
 	//fields
-	private static final int LINE = 20;
-	private static final int ROW = 40;
+	private static final int LINE = 20;	//num chars in one column
+	private static final int ROW = 40;	//num of rows total (or num rows in one column * 2)
 	private static final int NUM_WORDS = 10;
 	private static final int WORD_LEN = 4;
 
@@ -56,6 +58,7 @@ System.exit(1);
 	*/
 	private static int runGame() {
 		char[] grid = makeGrid();
+
 		String[] words = makeWords();
 		grid = inputWords(grid, words);
 
@@ -79,10 +82,20 @@ System.exit(1);
 
 		Random r = new Random();
 		int spacing = (LINE * ROW) / NUM_WORDS;	//frequency of words
+		//check for frequency vs word length conflict
+		if(spacing < WORD_LEN) {
+			System.out.println("Spacing and Word Length conflict");
+			System.exit(-1);
+		}
 
 		for(int i = 0; i < NUM_WORDS; i++) {
 			int region = r.nextInt(spacing - WORD_LEN);
 			int place = (i * spacing) + region;
+
+//delete later
+//System.out.println("region: " + region);
+//System.out.println("place: " + place);
+
 			for(int j = 0; j < WORD_LEN; j++) {
 				grid[j+place] = words[i].charAt(j);
 			}
@@ -120,16 +133,16 @@ System.exit(1);
 		Random r = new Random();
 
 		//populating array
-		for(int i = 0; i < LINE; i++) {
-			for(int j = 0; j < ROW; j++) {
-				int check = 65;
-				while(((check < 58) && (check > 47))
-				|| ((check < 123) && (check > 64))) {
-					check = r.nextInt(126 - 33) + 33;
-				}
-				grid[(i*j)+j] = (char) check;
+		for(int i = 0; i < LINE*ROW; i++) {
+			int check = 65;
+			while(((check < 58) && (check > 47))	//removing ascii codes 48-57
+			|| ((check < 91) && (check > 63)) 		//removing ascii codes 64-90
+			|| ((check < 123) && (check > 96))) {	//removing ascii codes 97-122
+				check = r.nextInt(126 - 33) + 33;
 			}
+			grid[i] = ((char)check);
 		}
+
 		return grid;
 	}
 
@@ -140,7 +153,7 @@ System.exit(1);
 	private static int[] getAddresses() {
 		Random r = new Random();
 		int start = r.nextInt(0x7B48) + 0x7B48;
-		int[] addresses = new int[LINE*2];
+		int[] addresses = new int[ROW];
 		addresses[0] = start;
 		for(int i = 1; i < addresses.length; i++) {
 			addresses[i] = addresses[i-1] + 0x06;
@@ -150,24 +163,32 @@ System.exit(1);
 
 	/**
 	Method to print the grid to the terminal window
-	@param grid is the array grid to be printed
+	@param grid is the char array to be printed
 	@param addresses is the array of computer memory addresses
 	*/
 	private static void print(char[] grid, int[] addresses) {
 
-		for(int i = 0; i < ROW; i++) {
+		for(int i = 0; i < ROW/2; i++) {
 
 			//printing address column
 			System.out.printf("0x" + "%x" + "\t", addresses[i]);
 
-			//printing data column
+			//printing first data column
 			for(int j = 0; j < LINE; j++) {
-				System.out.print(grid[(i*j)+j]);
+				System.out.print(grid[(i * LINE) + j]);
 			}
-			if(i%2 == 0)
-				System.out.print("\t");
-			else
-				System.out.println();
+
+			System.out.print("\t");
+
+			//printing second address column
+			System.out.printf("0x" + "%x" + "\t", addresses[ROW/2+i]);
+
+			//printing second data column
+			for(int j = 0; j < LINE; j++) {
+				System.out.print(grid[(i * LINE) + j + grid.length/2]);
+			}
+
+			System.out.println();
 		}
 	}
 
