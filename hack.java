@@ -10,6 +10,7 @@ December 12, 2015
 import java.io.File;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.NoSuchElementException;
 
 public class hack {
 
@@ -17,32 +18,48 @@ public class hack {
 	private static final int LINE = 20;	//num chars in one column
 	private static final int ROW = 40;	//num of rows total (or num rows in one column * 2)
 	private static final int NUM_WORDS = 10;
-	private static final int WORD_LEN = 4;
 	private static final int TRIES = 4;
+	private static int WORD_LEN = 4;
 
 	 public static void main(String[] args) {
 
-			Scanner scan = new Scanner(System.in);
-			String choice = "y";
+		//checking command line args
+		if(	args.length != 1
+			|| ( !args[0].equals("easy")
+			&& !args[0].equals("medium")
+			&& !args[0].equals("hard"))) {
 
-			//allowing user to continue
-			while(choice.equals("y")) {
-
-				//running actual game
-				int win = runGame();
-
-				//checking for win or loss
-				if(win == 1)
-					gameWin();
-
-				else
-					gameLose();
-
-				//continue?
-				System.out.println("continue? (y/n)");
-				choice = scan.next();
-			}
+			System.out.println("Usage: java hack <difficulty:{easy,medium,hard}>");
+			System.exit(1);
 		}
+		else if(args[0].equals("hard"))
+			WORD_LEN = 7;
+		else if(args[0].equals("medium"))
+			WORD_LEN = 5;
+		else
+			WORD_LEN = 4;
+
+		Scanner scan = new Scanner(System.in);
+		String choice = "y";
+
+		//allowing user to continue
+		while(choice.equals("y")) {
+
+			//running actual game
+			int win = runGame();
+
+			//checking for win or loss
+			if(win == 1)
+				gameWin();
+
+			else
+				gameLose();
+
+			//continue?
+			System.out.println("continue? (y/n)");
+			choice = scan.next();
+		}
+	}
 
 	/////////////////////
 	//ACCESSORY METHODS//
@@ -153,16 +170,33 @@ public class hack {
 	private static String[] makeWords() {
 		Random r = new Random();
 		String[] words = new String[NUM_WORDS];
+		int dictSize = getDictSize();
 
 		for(int i = 0; i < NUM_WORDS; i++) {
-			Scanner scan = getScanner("dictionary/dict4.txt");
-			int rand = r.nextInt(3900);
+			Scanner scan = getScanner("dictionary/dict" + WORD_LEN + ".txt");
+			int rand = r.nextInt(dictSize);
 			for(int j = 0; j < rand; j++) {
 				scan.nextLine();
 			}
 			words[i] = scan.next();
 		}
 		return words;
+	}
+
+	/**
+	Method to count the number of lines contained in a dictionary file
+	@return size which is the number of words in the dictionary file
+	*/
+	private static int getDictSize() {
+		int count = 0;
+		Scanner scan = getScanner("dictionary/dict" + WORD_LEN + ".txt");
+		try {
+			while(scan.nextLine() != null) { count++; }
+		}
+		catch (NoSuchElementException e) {
+			scan.close();
+		}
+		return count;
 	}
 
 	/**

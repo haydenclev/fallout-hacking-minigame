@@ -9,14 +9,16 @@ import java.io.PrintWriter;
 
 public class sort {
 
-	//word length field
-	private static final int WORD_LENGTH = 4;
-
 	public static void main(String[] args) {
+
+		//word length
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter desired dictionary word length: ");
+		int wordLength= input.nextInt();
 
 		File dict = new File("dict.txt");
 
-		File dict4 = new File("dict4.txt");
+		File newDict = new File("dict" + wordLength + ".txt");
 
 		//scanner for input file
 		Scanner scan = null;
@@ -31,7 +33,7 @@ public class sort {
 		//printwriter for output file
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(dict4);
+			writer = new PrintWriter(newDict);
 		}
 		catch (java.io.FileNotFoundException e) {
 			System.out.println("Problem with PrintWriter for output file");
@@ -43,7 +45,7 @@ public class sort {
 		while(scan.hasNextLine()) {
 
 			char[] word = scan.nextLine().toCharArray();
-			if(word.length == WORD_LENGTH) {
+			if(word.length == wordLength) {
 				for(char c : word)
 					writer.print(c);
 				writer.println();
