@@ -18,6 +18,7 @@ public class hack {
 	private static final int ROW = 40;	//num of rows total (or num rows in one column * 2)
 	private static final int NUM_WORDS = 10;
 	private static final int WORD_LEN = 4;
+	private static final int TRIES = 4;
 
 	 public static void main(String[] args) {
 
@@ -25,15 +26,13 @@ public class hack {
 			String choice = "y";
 
 			//allowing user to continue
-			while(choice == "y") {
+			while(choice.equals("y")) {
 
 				//running actual game
 				int win = runGame();
-//delete later
-System.exit(1);
 
 				//checking for win or loss
-				if(win == 0)
+				if(win == 1)
 					gameWin();
 
 				else
@@ -42,11 +41,7 @@ System.exit(1);
 				//continue?
 				System.out.println("continue? (y/n)");
 				choice = scan.next();
-				if(choice.equals("y") || choice.equals("n"))
-					continue;
 			}
-				
-
 		}
 
 	/////////////////////
@@ -57,20 +52,72 @@ System.exit(1);
 	Method to run the actual game
 	*/
 	private static int runGame() {
+		//variables to handle game board and state
 		char[] grid = makeGrid();
-
 		String[] words = makeWords();
 		grid = inputWords(grid, words);
-
-		//generating memory address values between columns
 		int[] addresses = getAddresses();
+		Scanner scan = new Scanner(System.in);
+		int chances = 0;
+		Random r = new Random();
+		int key = r.nextInt(words.length);
+		String[] guesses = new String[TRIES];
 
-		print(grid, addresses);
+		while(chances < TRIES) {
+			print(grid, addresses, guesses, chances);
 
-		//create words
+			//reading in user input
+			String choice = scan.next();
 
-		//create braces
-		return 0;
+			//checking for user match
+			int likeness = likeness(choice, words, key);
+
+			//checking if game is over
+			if(likeness == WORD_LEN) { return 1; }	//win
+
+			//handle braces
+			//handle likeness
+
+			//add user input to guesses
+			guesses[chances] = "INPUT: " + choice + " LIKENESS: " + likeness;
+
+			chances++;
+		}
+
+		return -1;	//lose
+	}
+
+	/**
+	Method to check likeness of user input
+	@param choice is the user input
+	@param words is the String[] of words
+	@param key is the entry in String[] that is the password
+	@return the likeness of the input and password
+	*/
+	private static int likeness(String choice, String[] words, int key) {
+		int likeness = 0;
+		for(int i = 0; i < WORD_LEN; i++) {
+			if(choice.charAt(i) == words[key].charAt(i)) {
+				likeness++;
+			}
+		}
+		return likeness;
+	}
+
+	/**
+	Method to check whether the game is over or not
+	@param chances is how many chances the user has remaining
+	@param likeness is the likeness of user input and password
+	@return 1 on win, 0 on lose, and likeness of input
+	*/
+	private static int gameOver(int chances, int likeness) {
+		if(likeness == WORD_LEN) {
+			return 1;	//win
+		}
+		else if(chances <= 0) {
+			return -1;	//lose
+		}
+		return 0;	//still going
 	}
 
 	/**
@@ -91,10 +138,6 @@ System.exit(1);
 		for(int i = 0; i < NUM_WORDS; i++) {
 			int region = r.nextInt(spacing - WORD_LEN);
 			int place = (i * spacing) + region;
-
-//delete later
-//System.out.println("region: " + region);
-//System.out.println("place: " + place);
 
 			for(int j = 0; j < WORD_LEN; j++) {
 				grid[j+place] = words[i].charAt(j);
@@ -165,8 +208,10 @@ System.exit(1);
 	Method to print the grid to the terminal window
 	@param grid is the char array to be printed
 	@param addresses is the array of computer memory addresses
+	@param guesses is the String[] of user guesses
+	@param chances is the number of tries so far by the user
 	*/
-	private static void print(char[] grid, int[] addresses) {
+	private static void print(char[] grid, int[] addresses, String[] guesses, int chances) {
 
 		for(int i = 0; i < ROW/2; i++) {
 
@@ -190,6 +235,14 @@ System.exit(1);
 
 			System.out.println();
 		}
+
+		//printing user guesses
+		for(int i = 0; i < guesses.length; i++) {
+			if(guesses[i] != null)
+				System.out.println(guesses[i]);
+		}
+
+		System.out.println("TRIES REMAINING: " + (TRIES-chances));
 	}
 
 	/**
