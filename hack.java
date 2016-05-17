@@ -113,7 +113,8 @@ public class hack {
 	*/
 	private static int likeness(String choice, String[] words, int key) {
 		int likeness = 0;
-		for(int i = 0; i < WORD_LEN; i++) {
+		int length = choice.length() < WORD_LEN ? choice.length() : WORD_LEN;
+		for(int i = 0; i < length; i++) {
 			if(choice.charAt(i) == words[key].charAt(i)) {
 				likeness++;
 			}
@@ -246,6 +247,8 @@ public class hack {
 	@param chances is the number of tries so far by the user
 	*/
 	private static void print(char[] grid, int[] addresses, String[] guesses, int chances) {
+
+		clear();
 
 		for(int i = 0; i < ROW/2; i++) {
 
