@@ -11,14 +11,15 @@ import java.io.File;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
+import java.util.ArrayList;
 
 public class hack {
 
 	//fields
-	private static final int LINE = 20;	//num chars in one column
-	private static final int ROW = 40;	//num of rows total (or num rows in one column * 2)
-	private static final int NUM_WORDS = 10;
-	private static final int TRIES = 4;
+	private static int LINE = 20;	//num chars in one column
+	private static int ROW = 40;	//num of rows total (or num rows in one column * 2)
+	private static int NUM_WORDS = 10;
+	private static int TRIES = 4;
 	private static int WORD_LEN = 4;
 
 	 public static void main(String[] args) {
@@ -27,10 +28,17 @@ public class hack {
 		if(	args.length != 1
 			|| ( !args[0].equals("easy")
 			&& !args[0].equals("medium")
-			&& !args[0].equals("hard"))) {
+			&& !args[0].equals("hard"))
+			&& !args[0].equals("extreme")) {
 
 			System.out.println("Usage: java hack <difficulty:{easy,medium,hard}>");
 			System.exit(1);
+		}
+		else if(args[0].equals("extreme")) {
+			WORD_LEN = 7;
+			LINE = 60;
+			ROW = 80;
+			NUM_WORDS = 50;
 		}
 		else if(args[0].equals("hard"))
 			WORD_LEN = 7;
@@ -123,22 +131,6 @@ public class hack {
 	}
 
 	/**
-	Method to check whether the game is over or not
-	@param chances is how many chances the user has remaining
-	@param likeness is the likeness of user input and password
-	@return 1 on win, 0 on lose, and likeness of input
-	*/
-	private static int gameOver(int chances, int likeness) {
-		if(likeness == WORD_LEN) {
-			return 1;	//win
-		}
-		else if(chances <= 0) {
-			return -1;	//lose
-		}
-		return 0;	//still going
-	}
-
-	/**
 	Method to put the words in the grid
 	@param grid is the game grid of ascii chars
 	@param words is the String[] of words
@@ -171,11 +163,18 @@ public class hack {
 	private static String[] makeWords() {
 		Random r = new Random();
 		String[] words = new String[NUM_WORDS];
+		ArrayList<Integer> numbers = new ArrayList<Integer>();
 		int dictSize = getDictSize();
 
 		for(int i = 0; i < NUM_WORDS; i++) {
 			Scanner scan = getScanner("dictionary/dict" + WORD_LEN + ".txt");
 			int rand = r.nextInt(dictSize);
+			//making sure word not already included
+			while(numbers.contains(rand)) {
+				rand = r.nextInt(dictSize);
+				System.out.println("asdf");
+			}
+			numbers.add(rand);
 			for(int j = 0; j < rand; j++) {
 				scan.nextLine();
 			}
