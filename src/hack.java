@@ -1,4 +1,4 @@
-/**
+package src; /**
 This class executes HACKING a java/terminal window replication of the 
 popular Fallout 4 terminal hacking system.
 
@@ -7,11 +7,9 @@ hayden.clev@gmail.com
 December 12, 2015
 */
 
-import java.io.File;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.NoSuchElementException;
-import java.util.ArrayList;
+import java.util.*;
+
+import static src.utils.*;
 
 public class hack {
 
@@ -19,7 +17,7 @@ public class hack {
 	private static int LINE = 20;	//num chars in one column
 	private static int ROW = 40;	//num of rows total (or num rows in one column * 2)
 	private static int NUM_WORDS = 10;
-	private static int TRIES = 4;
+	private static int GUESS_LIMIT = 4;
 	private static int WORD_LEN = 4;
 
 	 public static void main(String[] args) {
@@ -31,7 +29,7 @@ public class hack {
 			&& !args[0].equals("hard"))
 			&& !args[0].equals("extreme")) {
 
-			System.out.println("Usage: java hack <difficulty:{easy,medium,hard}>");
+			System.out.println("Usage: java src.hack <difficulty:{easy,medium,hard}>");
 			System.exit(1);
 		}
 		else if(args[0].equals("extreme")) {
@@ -69,9 +67,7 @@ public class hack {
 		}
 	}
 
-	/////////////////////
-	//ACCESSORY METHODS//
-	/////////////////////
+
 
 	/**
 	Method to run the actual game
@@ -79,51 +75,78 @@ public class hack {
 	private static int runGame() {
 		//variables to handle game board and state
 		char[] grid = makeGrid();
-		String[] words = makeWords();
+		Set<String> words = makeWords();
 		grid = inputWords(grid, words);
 		int[] addresses = getAddresses();
 		Scanner scan = new Scanner(System.in);
-		int chances = 0;
-		Random r = new Random();
-		int key = r.nextInt(words.length);
-		String[] guesses = new String[TRIES];
+		int guessCount = 0;
+		String password = choosePassword(words);
+		List<String> guesses = new ArrayList<>(GUESS_LIMIT);
 
-		while(chances < TRIES) {
-			print(grid, addresses, guesses, chances);
+		while(guessCount < GUESS_LIMIT) {
+			print(grid, addresses, guesses, guessCount);
 
 			//reading in user input
-			String choice = scan.next();
+			String guess = scan.next();
 
-			//checking for user match
-			int likeness = likeness(choice, words, key);
+			if(words.contains(guess)) {
+				//checking for user match
+				int likeness = likeness(guess, password);
 
-			//checking if game is over
-			if(likeness == WORD_LEN) { return 1; }	//win
+				//checking if game is over
+				if (likeness == WORD_LEN) {
+					return 1;
+				}    //win
 
-			//handle braces
-			//handle likeness
+				//handle braces
+				//handle likeness
 
-			//add user input to guesses
-			guesses[chances] = "INPUT: " + choice + " LIKENESS: " + likeness;
+				//add user input to guesses
+				guesses.add("INPUT: " + guess + " LIKENESS: " + likeness);
 
-			chances++;
+				guessCount++;
+			}
+			else {
+				guesses.add("INVALID GUESS: " + guess);
+			}
+
+
 		}
-
+		System.out.println("password: " + password);
 		return -1;	//lose
+	}
+
+	/**
+	 * Method to choose password from set of possible options
+	 * @param words is the Set<String> of options
+	 */
+	private static String choosePassword(Set<String> words) {
+		Random r = new Random();
+		int key = r.nextInt(NUM_WORDS);
+
+		int i = 0;
+		String password = null;
+		for(String word : words) {
+			if(i == key) {
+				password = word;
+				break;
+			}
+			i++;
+		}
+		return password;
 	}
 
 	/**
 	Method to check likeness of user input
 	@param choice is the user input
-	@param words is the String[] of words
-	@param key is the entry in String[] that is the password
+	@param password is the password
 	@return the likeness of the input and password
 	*/
-	private static int likeness(String choice, String[] words, int key) {
+	private static int likeness(String choice, String password) {
 		int likeness = 0;
 		int length = choice.length() < WORD_LEN ? choice.length() : WORD_LEN;
 		for(int i = 0; i < length; i++) {
-			if(choice.charAt(i) == words[key].charAt(i)) {
+			if(choice.charAt(i) == password.charAt(i)) {
 				likeness++;
 			}
 		}
@@ -133,9 +156,9 @@ public class hack {
 	/**
 	Method to put the words in the grid
 	@param grid is the game grid of ascii chars
-	@param words is the String[] of words
+	@param words is the Set<String> of words
 	*/
-	private static char[] inputWords(char[] grid, String[] words) {
+	private static char[] inputWords(char[] grid, Set<String> words) {
 
 		Random r = new Random();
 		int spacing = (LINE * ROW) / NUM_WORDS;	//frequency of words
@@ -145,12 +168,15 @@ public class hack {
 			System.exit(-1);
 		}
 
+		Iterator<String> iterator = words.iterator();
+
 		for(int i = 0; i < NUM_WORDS; i++) {
 			int region = r.nextInt(spacing - WORD_LEN);
 			int place = (i * spacing) + region;
 
+			String word = iterator.next();
 			for(int j = 0; j < WORD_LEN; j++) {
-				grid[j+place] = words[i].charAt(j);
+				grid[j+place] = word.charAt(j);
 			}
 		}
 		return grid;
@@ -158,11 +184,11 @@ public class hack {
 
 	/**
 	Method to create the array of words that appear in the grid
-	@return words a String[] of words
+	@return words a Set<String> of words
 	*/
-	private static String[] makeWords() {
+	private static Set<String> makeWords() {
 		Random r = new Random();
-		String[] words = new String[NUM_WORDS];
+		HashSet<String> words = new HashSet<>();
 		ArrayList<Integer> numbers = new ArrayList<Integer>();
 		int dictSize = getDictSize();
 
@@ -172,13 +198,12 @@ public class hack {
 			//making sure word not already included
 			while(numbers.contains(rand)) {
 				rand = r.nextInt(dictSize);
-				System.out.println("asdf");
 			}
 			numbers.add(rand);
 			for(int j = 0; j < rand; j++) {
 				scan.nextLine();
 			}
-			words[i] = scan.next();
+			words.add(scan.next());
 		}
 		return words;
 	}
@@ -242,10 +267,10 @@ public class hack {
 	Method to print the grid to the terminal window
 	@param grid is the char array to be printed
 	@param addresses is the array of computer memory addresses
-	@param guesses is the String[] of user guesses
+	@param guesses is the List<String> of user guesses
 	@param chances is the number of tries so far by the user
 	*/
-	private static void print(char[] grid, int[] addresses, String[] guesses, int chances) {
+	private static void print(char[] grid, int[] addresses, List<String> guesses, int chances) {
 
 		clear();
 
@@ -273,55 +298,11 @@ public class hack {
 		}
 
 		//printing user guesses
-		for(int i = 0; i < guesses.length; i++) {
-			if(guesses[i] != null)
-				System.out.println(guesses[i]);
+		for(int i = 0; i < guesses.size(); i++) {
+			if(guesses.get(i) != null)
+				System.out.println(guesses.get(i));
 		}
 
-		System.out.println("TRIES REMAINING: " + (TRIES-chances));
-	}
-
-	/**
-	Method to print win screen
-	*/
-	private static void gameWin() {
-		clear();
-		System.out.println("You Won!");
-	}
-
-	/**
-	Method to print lose screen
-	*/
-	private static void gameLose() {
-		clear();
-		System.out.println("You Lose!");
-	}
-
-	/**
-	Method to clear the terminal window
-	*/
-	private static void clear() {
-		for(int i = 0; i < 56; i++) {
-			System.out.println();
-		}
-	}
-
-	/**
-	Method to get a Scanner from a specified filename
-	@param filename is a string denoting the filename
-	@return scan the finished scanner
-	*/
-	private static Scanner getScanner(String filename) {
-		File inputFile = new File(filename);
-		Scanner scan = null;
-
-		try {
-			scan = new Scanner(inputFile);
-		}
-		catch (java.io.FileNotFoundException e) {
-			System.out.println("scanner error");
-			System.exit(1);
-		}
-		return scan;
+		System.out.println("GUESS_LIMIT REMAINING: " + (GUESS_LIMIT -chances));
 	}
 }

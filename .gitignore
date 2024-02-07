@@ -1,4 +1,8 @@
-hack.class
+src.hack.class
 test.java
 test.class
 dictionary/sort.class
+.idea/
+hacking.iml
+out/
+
