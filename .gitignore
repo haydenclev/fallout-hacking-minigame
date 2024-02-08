@@ -5,4 +5,4 @@ dictionary/sort.class
 .idea/
 hacking.iml
 out/
-
+node_modules/
