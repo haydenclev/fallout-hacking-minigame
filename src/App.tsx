@@ -1,8 +1,8 @@
 import React from 'react';
-import fs from 'fs';
+import JsonDictionary from './dictionary/7_letter_words.json';
 import './App.css';
 
-function App() {
+export function App() {
   return (
     <div className="App">
       <p>
@@ -23,11 +23,10 @@ const WORD_LEN = 7;
 function runGame() {
   let grid: string[] = makeGrid();
   let words: Set<string> = makeWords();
-  grid = inputWords(grid, words);
-  return grid;
+  return inputWords(grid, words);
 }
 
-function makeGrid() {
+export function makeGrid() {
   const lengthOfGrid = TOTAL_ROWS * CHARACTERS_PER_COLUMN;
   const allowedCharacters = `~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\`
   let grid: string[] = [];
@@ -39,10 +38,9 @@ function makeGrid() {
 		return grid;
 }
 
-function makeWords() {
+export function makeWords() {
   let words: Set<string> = new Set();
-  const dictionaryName = `dictionary/dict${WORD_LEN}.txt`
-  const dictionary: string[] = fs.readFileSync(dictionaryName, "utf8").split(`\n`);
+  const dictionary: string[] = JsonDictionary.map((x) => { return x.word});
   while(words.size < NUM_WORDS) {
     let randomInt = Math.floor(Math.random() * dictionary.length);
     let word = dictionary[randomInt];
@@ -53,14 +51,17 @@ function makeWords() {
   return words;
 }
 
-function inputWords(grid: string[], words: Set<string>): string[] {
-  let frequency = grid.length / words.size;
-  for(const [index, word] of grid.entries()) {
+export function inputWords(grid: string[], words: Set<string>): string[] {
+  let frequency = grid.length / NUM_WORDS;
+  let wordCount = 0;
+  for(const word of words.values()) {
+    console.log("inside loop");
     let variation = Math.floor(Math.random() * (frequency - WORD_LEN));
-    let placement = (index * frequency) + variation;
+    let placement = (wordCount * frequency) + variation;
     for(let i = 0; i < WORD_LEN; i++) {
       grid[placement + i] = word[i];
     }
+    wordCount++;
   }
   return grid;
 }
