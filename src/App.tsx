@@ -1,4 +1,5 @@
 import React from 'react';
+import { KeyboardEvent } from 'react';
 import JsonDictionary from './dictionary/7_letter_words.json';
 import './App.css';
 
@@ -8,7 +9,8 @@ export function App() {
       <p>
         <code>RobCo Industries Terminal Hacking Minigame</code>
         <br/>
-        <code>{runGame()}</code>
+        <br/>
+        {runGame()}
       </p>
     </div>
   );
@@ -21,14 +23,54 @@ const TOTAL_ROWS = 40;
 const WORD_LEN = 7;
 
 function runGame() {
-  let grid: string[] = makeGrid();
   let words: Set<string> = makeWords();
-  grid = inputWords(grid, words);
   const password = choosePassword(words);
-  return `password: ${password}`;
+  let guessCount = 0;
+  let guesses: Set<string> = new Set();
+  return (
+    <div>
+      { grid(words) }
+      <br/>
+      { inputField(password) }
+    </div>
+  )
 }
 
-export function makeGrid() {
+function grid(words: Set<string>) {
+  let grid: string[] = makeGrid(words);
+  return (
+    <code>${grid}</code>
+  );
+}
+
+function inputField(password: string) {
+  return (
+    <input onKeyDown={(e) => {
+      if(e.key == "Enter") {
+        const input = e.target as HTMLInputElement;
+        alert(`similarty: ${handleGuess(input.value, password)}`);
+        (e.target as HTMLInputElement).value = '';
+      }
+    }} />
+  );
+}
+
+function handleGuess(guess: string, password: string) {
+  let numberOfMatchingChars = likeness(guess, password);
+
+}
+
+function likeness(guess: string, password: string) {
+  let similarity = 0;
+  for (let i = 0; i < guess.length; i++) {
+    if (guess[i] == password[i]) {
+      similarity++;
+    }
+  }
+  return similarity;
+}
+
+export function makeGrid(words: Set<string>) {
   const lengthOfGrid = TOTAL_ROWS * CHARACTERS_PER_COLUMN;
   const allowedCharacters = `~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\`
   let grid: string[] = [];
@@ -37,7 +79,8 @@ export function makeGrid() {
 			const randomInt = Math.floor(Math.random() * allowedCharacters.length);
 			grid[i] = allowedCharacters[randomInt];
 		}
-		return grid;
+
+    return inputWords(grid, words);
 }
 
 export function makeWords() {
@@ -57,7 +100,6 @@ export function inputWords(grid: string[], words: Set<string>): string[] {
   let frequency = grid.length / NUM_WORDS;
   let wordCount = 0;
   for(const word of words.values()) {
-    console.log("inside loop");
     let variation = Math.floor(Math.random() * (frequency - WORD_LEN));
     let placement = (wordCount * frequency) + variation;
     for(let i = 0; i < WORD_LEN; i++) {
