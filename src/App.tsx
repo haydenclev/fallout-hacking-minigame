@@ -3,6 +3,7 @@ import './App.css';
 import { GlobalContext } from './Context';
 import Header from './Header';
 import Grid from './Grid';
+import GuessLog from './GuessLog';
 
 export function App() {
   const globalSettings = useContext(GlobalContext);
@@ -13,6 +14,9 @@ export function App() {
         <br/>
         <br/>
         <Grid/>
+        <br/>
+        <br/>
+        <GuessLog/>
       </p>
     </GlobalContext.Provider>
   );
