@@ -23,7 +23,9 @@ const WORD_LEN = 7;
 function runGame() {
   let grid: string[] = makeGrid();
   let words: Set<string> = makeWords();
-  return inputWords(grid, words);
+  grid = inputWords(grid, words);
+  const password = choosePassword(words);
+  return `password: ${password}`;
 }
 
 export function makeGrid() {
@@ -67,3 +69,7 @@ export function inputWords(grid: string[], words: Set<string>): string[] {
 }
 
 export default App;
+
+function choosePassword(words: Set<string>) {
+  return Array.from(words.values())[Math.floor(Math.random() * words.size)];
+}
