@@ -7,7 +7,7 @@ export function App() {
   return (
     <div className="App">
       <p>
-        <code>RobCo Industries Terminal Hacking Minigame</code>
+        <code>robco industries (tm) termlink protocol</code>
         <br/>
         <br/>
         {runGame()}
@@ -31,7 +31,7 @@ function runGame() {
     <div>
       { grid(words) }
       <br/>
-      { inputField(password) }
+      { inputField(password, guessCount) }
     </div>
   )
 }
@@ -43,21 +43,35 @@ function grid(words: Set<string>) {
   );
 }
 
-function inputField(password: string) {
+function inputField(password: string, guessCount: number) {
   return (
-    <input onKeyDown={(e) => {
-      if(e.key == "Enter") {
-        const input = e.target as HTMLInputElement;
-        alert(`similarty: ${handleGuess(input.value, password)}`);
-        (e.target as HTMLInputElement).value = '';
+    <input 
+      // min={7}
+      // max={7}
+      onKeyDown={(e) => {
+        if(e.key == "Enter") {
+          const input = e.target as HTMLInputElement;
+          alert(`similarty: ${handleGuess(input.value, password, guessCount)}`);
+          (e.target as HTMLInputElement).value = '';
       }
     }} />
   );
 }
 
-function handleGuess(guess: string, password: string) {
+function handleGuess(guess: string, password: string, guessCount: number) {
+  if(guess.length != password.length) {
+    alert("Invalid guess!");
+    return 0;
+  }
   let numberOfMatchingChars = likeness(guess, password);
-
+  guessCount++;
+  if(numberOfMatchingChars == WORD_LEN) {
+    alert(" You win! ");
+  }
+  else if(guessCount > GUESS_LIMIT) {
+    alert(" You lose!");
+  }
+  return numberOfMatchingChars;
 }
 
 function likeness(guess: string, password: string) {
