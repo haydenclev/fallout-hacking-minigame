@@ -11,11 +11,7 @@ export function App() {
     <GlobalContext.Provider value={globalSettings}>
       <p>
         <Header/>
-        <br/>
-        <br/>
         <Grid/>
-        <br/>
-        <br/>
         <GuessLog/>
       </p>
     </GlobalContext.Provider>

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { GlobalContext } from "./Context";
 import JsonDictionary from './dictionary/7_letter_words.json';
+import Column from "./Column";
 
 
 function Grid() {
@@ -11,7 +12,8 @@ function Grid() {
   let guessCount = 0;
   return (
     <div>
-      <code>${grid}</code>
+      <Column data={grid.slice(0, grid.length / 2)}/>
+      <Column data={grid.slice(grid.length / 2, grid.length)}/>
       {inputField(password, guessCount, WORD_LEN, GUESS_LIMIT)}
     </div>
   );
