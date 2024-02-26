@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import './App.css';
 import { GlobalContext } from './Context';
-import Header from './Header';
 import Grid, { makeGrid, makeWords } from './Grid';
 import GuessLog from './GuessLog';
+import Header from './Header';
 import UserInput from './UserInput';
 
 
@@ -14,14 +14,21 @@ export function App() {
   let grid: string[] = makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_COLUMN, NUM_WORDS, WORD_LEN);
   const password = choosePassword(words);
   let guessCount = 0;
-  let [guessLog, setGuessLog] = useState([]);
+  let [guessLog, setGuessLog] = useState<string[]>([]);
+
   return (
     <GlobalContext.Provider value={globalSettings}>
       <p>
         <Header/>
         <Grid grid={grid}/>
         <GuessLog guessLog={guessLog}/>
-        <UserInput password={password} guessCount={guessCount} wordLength={WORD_LEN} guessLimit={GUESS_LIMIT} />
+        <UserInput 
+          setGuessLog={setGuessLog} 
+          password={password}
+          guessCount={guessCount}
+          wordLength={WORD_LEN}
+          guessLimit={GUESS_LIMIT}
+          guessLog={guessLog}/>
       </p>
     </GlobalContext.Provider>
   );

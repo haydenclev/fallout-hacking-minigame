@@ -3,9 +3,11 @@ interface UserInputProps {
   guessCount: number,
   wordLength: number,
   guessLimit: number,
+  guessLog: string[],
+  setGuessLog: Function,
 }
 
-export default function UserInput({password, guessCount, wordLength, guessLimit}: UserInputProps) {
+export default function UserInput({password, guessCount, wordLength, guessLimit, guessLog, setGuessLog}: UserInputProps) {
   return (
     <input 
       // min={7}
@@ -13,14 +15,21 @@ export default function UserInput({password, guessCount, wordLength, guessLimit}
       onKeyDown={(e) => {
         if(e.key == "Enter") {
           const input = e.target as HTMLInputElement;
-          alert(`similarty: ${handleGuess(input.value, password, guessCount, wordLength, guessLimit)}`);
+          handleGuess(input.value, password, guessCount, wordLength, guessLimit, guessLog, setGuessLog);
           (e.target as HTMLInputElement).value = '';
       }
     }} />
   )
 }
 
-function handleGuess(guess: string, password: string, guessCount: number, wordLength: number, guessLimit: number) {
+function handleGuess(
+  guess: string,
+  password: string,
+  guessCount: number,
+  wordLength: number,
+  guessLimit: number,
+  guessLog: string[],
+  setGuessLog: Function) {
   if(guess.length != password.length) {
     alert("Invalid guess!");
     return 0;
@@ -33,6 +42,7 @@ function handleGuess(guess: string, password: string, guessCount: number, wordLe
   else if(guessCount > guessLimit) {
     alert(" You lose!");
   }
+  setGuessLog([...guessLog, guess, `Entry denied. ${numberOfMatchingChars}/7 correct`]);
   return numberOfMatchingChars;
 }
 
