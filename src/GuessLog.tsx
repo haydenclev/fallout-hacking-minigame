@@ -1,7 +1,8 @@
-function GuessLog() {
-  let guessLog: string[] = [];
-  guessLog.push("> previous guesses go here");
-  guessLog.push("> more guesses go here");
+interface GuessLogProps {
+  guessLog: string[],
+}
+
+function GuessLog({guessLog}: GuessLogProps) {
   return (
     <div>
       { guessLog.map((x) => {
