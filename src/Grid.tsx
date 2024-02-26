@@ -11,7 +11,9 @@ function Grid({grid}: GridProps) {
   return (
     <div>
       <Column data={grid.slice(0, grid.length / 2)}/>
+      <Column data={makeAddresses()} />
       <Column data={grid.slice(grid.length / 2, grid.length)}/>
+      <Column data={makeAddresses()} />
     </div>
   );
 }
@@ -60,6 +62,14 @@ export function inputWords(grid: string[], words: Set<string>, numberOfWords: nu
     wordCount++;
   }
   return grid;
+}
+
+function makeAddresses(): string[] {
+  let addresses: string[] = []
+  for(let i = 0; i < 17; i++) {
+    addresses.push(`0x${Math.floor((Math.random() * 0x10000)).toString(16)}`);
+  }
+  return addresses;
 }
 
 export default Grid;
