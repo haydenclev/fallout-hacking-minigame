@@ -5,10 +5,10 @@ interface GuessLogProps {
 function GuessLog({guessLog}: GuessLogProps) {
   return (
     <div>
-      { guessLog.map((x) => {
+      { guessLog.map((line, index) => {
         return ( 
-          <ul>
-            <code> {x} </code>
+          <ul key={index}>
+            <code> {line} </code>
           </ul>
         )
       }) }
