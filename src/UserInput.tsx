@@ -62,7 +62,6 @@ function handleGuess(
   }
   let numberOfMatchingChars = likeness(guess, password);
   setGuessCount(guessCount + 1);
-  console.log(`guess count: ${guessCount}`);
   if(numberOfMatchingChars === wordLength) {
     setGuessLog([...guessLog, guess, `Password Accepted.`]);
     alert(" You win! ");
