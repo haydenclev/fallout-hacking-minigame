@@ -1,21 +1,44 @@
+import { GameState } from "./utils";
+
 interface UserInputProps {
-  password: string,
   guessCount: number,
-  wordLength: number,
   guessLimit: number,
   guessLog: string[],
+  password: string,
+  setGameState: Function,
+  setGuessCount: Function,
   setGuessLog: Function,
+  wordLength: number,
 }
 
-export default function UserInput({password, guessCount, wordLength, guessLimit, guessLog, setGuessLog}: UserInputProps) {
+export default function UserInput({
+  guessCount,
+  guessLimit,
+  guessLog,
+  password,
+  setGameState,
+  setGuessCount,
+  setGuessLog,
+  wordLength,
+}: UserInputProps) {
   return (
     <input 
       // min={7}
       // max={7}
       onKeyDown={(e) => {
-        if(e.key == "Enter") {
+        if(e.key === "Enter") {
           const input = e.target as HTMLInputElement;
-          handleGuess(input.value, password, guessCount, wordLength, guessLimit, guessLog, setGuessLog);
+          handleGuess(
+            input.value,
+            guessCount,
+            guessLimit,
+            guessLog,
+            password,
+            setGameState,
+            setGuessCount,
+            setGuessLog,
+            wordLength
+          );
           (e.target as HTMLInputElement).value = '';
       }
     }} />
@@ -24,32 +47,42 @@ export default function UserInput({password, guessCount, wordLength, guessLimit,
 
 function handleGuess(
   guess: string,
-  password: string,
   guessCount: number,
-  wordLength: number,
   guessLimit: number,
   guessLog: string[],
-  setGuessLog: Function) {
-  if(guess.length != password.length) {
+  password: string,
+  setGameState: Function,
+  setGuessCount: Function,
+  setGuessLog: Function,
+  wordLength: number,
+  ) {
+  if(guess.length !== password.length) {
     alert("Invalid guess!");
     return 0;
   }
   let numberOfMatchingChars = likeness(guess, password);
-  guessCount++;
-  if(numberOfMatchingChars == wordLength) {
+  setGuessCount(guessCount + 1);
+  console.log(`guess count: ${guessCount}`);
+  if(numberOfMatchingChars === wordLength) {
+    setGuessLog([...guessLog, guess, `Password Accepted.`]);
     alert(" You win! ");
+    setGameState(GameState.WIN);
   }
-  else if(guessCount > guessLimit) {
+  else if(guessCount >= guessLimit) {
+    setGuessLog([...guessLog, guess, `Entry denied. Likeness = ${numberOfMatchingChars}`]);
     alert(" You lose!");
+    setGameState(GameState.LOSE);
   }
-  setGuessLog([...guessLog, guess, `Entry denied. ${numberOfMatchingChars}/7 correct`]);
+  else {
+    setGuessLog([...guessLog, guess, `Entry denied. Likeness = ${numberOfMatchingChars}`]);
+  }
   return numberOfMatchingChars;
 }
 
 function likeness(guess: string, password: string) {
   let similarity = 0;
   for (let i = 0; i < guess.length; i++) {
-    if (guess[i] == password[i]) {
+    if (guess[i] === password[i]) {
       similarity++;
     }
   }
