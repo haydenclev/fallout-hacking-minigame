@@ -1,5 +1,5 @@
 import Column from "./Column";
-import JsonDictionary from './dictionary/7_letter_words.json';
+import JsonDictionary from '../dictionary/7_letter_words.json';
 
 
 interface GridProps {

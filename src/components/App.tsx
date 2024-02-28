@@ -1,11 +1,11 @@
 import { useContext, useRef, useState } from 'react';
-import './App.css';
+import '../style/App.css';
 import { GlobalContext } from './Context';
 import Grid, { makeGrid, makeWords } from './Grid';
 import GuessLog from './GuessLog';
 import Header from './Header';
 import UserInput from './UserInput';
-import { GameState } from './utils';
+import { GameState } from '../utils';
 
 
 export function App() {

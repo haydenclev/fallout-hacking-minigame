@@ -1,4 +1,4 @@
-import { GameState } from "./utils";
+import { GameState } from "../utils";
 
 interface UserInputProps {
   guessCount: number,
