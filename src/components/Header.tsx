@@ -16,11 +16,9 @@ function Header({guessCount, guessLimit}: HeaderProps) {
   const displaywarningMessage = guessLimit - guessCount === 1 ? true : false;
   return (
     <div className="header">
-      <code>{headerMessage}</code>
-      <br/>
-      <code>{displaywarningMessage ? warningMessage : regularMesage}</code>
-      <br/>
-      <code className="attempts">attempts remaining: {attemptsArray}</code>
+      <p>{headerMessage}</p>
+      <p>{displaywarningMessage ? warningMessage : regularMesage}</p>
+      <p className="attempts">attempts remaining: {attemptsArray}</p>
     </div>
   )
 }

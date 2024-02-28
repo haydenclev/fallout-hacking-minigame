@@ -9,15 +9,18 @@
 } 
 
 body {
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
   background-color: black;
   font-family: 'monospace';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
+p {
   font-family: 'fixedsys', 'Share Tech Mono', 'Courier New', monospace;
-  font-weight: 400;
+  font-weight: normal;
   font-style: normal;
+  margin-top: 0em;
+  margin-bottom: 0em;
 }

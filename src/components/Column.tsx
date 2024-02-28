@@ -4,7 +4,7 @@ interface ColumnProps {
 
 function Column({ data }: ColumnProps) {
   return (
-    <code>{data}</code>
+    <p>{data}</p>
   );
 }
 

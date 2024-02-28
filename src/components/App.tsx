@@ -39,8 +39,8 @@ export function App() {
             words={words}
           />
         </div>}
-        {gameState === GameState.LOSE && <div>Terminal Locked. Please contact an administrator.</div>}
-        {gameState === GameState.WIN && <div>Secrets of untold import.</div>}
+        {gameState === GameState.LOSE && <p>Terminal Locked. Please contact an administrator.</p>}
+        {gameState === GameState.WIN && <p>Secrets of untold import.</p>}
       </GlobalContext.Provider>
     </div>
   );
