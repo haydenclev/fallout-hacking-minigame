@@ -14,7 +14,7 @@ export function App() {
 
   let [guessLog, setGuessLog] = useState<string[]>([]);
   let [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
-  let [guessCount, setGuessCount] = useState<number>(1);
+  let [guessCount, setGuessCount] = useState<number>(0);
 
   const words = useRef(makeWords(NUM_WORDS)).current;
   const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_COLUMN, NUM_WORDS, WORD_LEN)).current;
@@ -23,7 +23,7 @@ export function App() {
   return (
     <GlobalContext.Provider value={globalSettings}>
       {gameState === GameState.IN_PROGRESS && <div>
-        <Header/>
+        <Header guessCount={guessCount} guessLimit={GUESS_LIMIT}/>
         <Grid grid={grid}/>
         <GuessLog guessLog={guessLog}/>
         <UserInput 

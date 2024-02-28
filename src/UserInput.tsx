@@ -61,13 +61,14 @@ function handleGuess(
     return 0;
   }
   let numberOfMatchingChars = likeness(guess, password);
-  setGuessCount(guessCount + 1);
+  const newGuessCount = guessCount + 1;
+  setGuessCount(newGuessCount);
   if(numberOfMatchingChars === wordLength) {
     setGuessLog([...guessLog, guess, `Password Accepted.`]);
     alert(" You win! ");
     setGameState(GameState.WIN);
   }
-  else if(guessCount >= guessLimit) {
+  else if(newGuessCount >= guessLimit) {
     setGuessLog([...guessLog, guess, `Entry denied. Likeness = ${numberOfMatchingChars}`]);
     alert(" You lose!");
     setGameState(GameState.LOSE);
