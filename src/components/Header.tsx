@@ -1,4 +1,5 @@
 import { isArrayLiteralExpression } from "typescript";
+import "../style/Header.css"
 
 interface HeaderProps {
   guessCount: number,
@@ -14,12 +15,12 @@ function Header({guessCount, guessLimit}: HeaderProps) {
 
   const displaywarningMessage = guessLimit - guessCount === 1 ? true : false;
   return (
-    <div>
+    <div className="header">
       <code>{headerMessage}</code>
       <br/>
       <code>{displaywarningMessage ? warningMessage : regularMesage}</code>
       <br/>
-      <code>attempts remaining: {attemptsArray}</code>
+      <code className="attempts">attempts remaining: {attemptsArray}</code>
     </div>
   )
 }

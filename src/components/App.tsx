@@ -10,7 +10,7 @@ import { GameState } from '../utils';
 
 export function App() {
   const globalSettings = useContext(GlobalContext);
-  const {NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_COLUMN, WORD_LEN, GUESS_LIMIT} = globalSettings;
+  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_COLUMN, WORD_LEN, GUESS_LIMIT } = globalSettings;
 
   let [guessLog, setGuessLog] = useState<string[]>([]);
   let [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
@@ -21,26 +21,28 @@ export function App() {
   const password = useRef(choosePassword(words)).current;
 
   return (
-    <GlobalContext.Provider value={globalSettings}>
-      {gameState === GameState.IN_PROGRESS && <div>
-        <Header guessCount={guessCount} guessLimit={GUESS_LIMIT}/>
-        <Grid grid={grid}/>
-        <GuessLog guessLog={guessLog}/>
-        <UserInput 
-          guessCount={guessCount}
-          guessLimit={GUESS_LIMIT}
-          guessLog={guessLog}
-          password={password}
-          setGameState={setGameState}
-          setGuessCount={setGuessCount}
-          setGuessLog={setGuessLog} 
-          wordLength={WORD_LEN}
-          words={words}
+    <div className="app">
+      <GlobalContext.Provider value={globalSettings}>
+        {gameState === GameState.IN_PROGRESS && <div>
+          <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
+          <Grid grid={grid} />
+          <GuessLog guessLog={guessLog} />
+          <UserInput
+            guessCount={guessCount}
+            guessLimit={GUESS_LIMIT}
+            guessLog={guessLog}
+            password={password}
+            setGameState={setGameState}
+            setGuessCount={setGuessCount}
+            setGuessLog={setGuessLog}
+            wordLength={WORD_LEN}
+            words={words}
           />
-      </div>}
-      {gameState === GameState.LOSE && <div>Terminal Locked. Please contact an administrator.</div>}
-      {gameState === GameState.WIN && <div>Secrets of untold import.</div>}
-    </GlobalContext.Provider>
+        </div>}
+        {gameState === GameState.LOSE && <div>Terminal Locked. Please contact an administrator.</div>}
+        {gameState === GameState.WIN && <div>Secrets of untold import.</div>}
+      </GlobalContext.Provider>
+    </div>
   );
 }
 
