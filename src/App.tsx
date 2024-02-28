@@ -34,7 +34,9 @@ export function App() {
           setGameState={setGameState}
           setGuessCount={setGuessCount}
           setGuessLog={setGuessLog} 
-          wordLength={WORD_LEN}/>
+          wordLength={WORD_LEN}
+          words={words}
+          />
       </div>}
       {gameState === GameState.LOSE && <div>Terminal Locked. Please contact an administrator.</div>}
       {gameState === GameState.WIN && <div>Secrets of untold import.</div>}

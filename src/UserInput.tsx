@@ -9,6 +9,7 @@ interface UserInputProps {
   setGuessCount: Function,
   setGuessLog: Function,
   wordLength: number,
+  words: Set<string>,
 }
 
 export default function UserInput({
@@ -20,6 +21,7 @@ export default function UserInput({
   setGuessCount,
   setGuessLog,
   wordLength,
+  words,
 }: UserInputProps) {
   return (
     <input 
@@ -37,7 +39,8 @@ export default function UserInput({
             setGameState,
             setGuessCount,
             setGuessLog,
-            wordLength
+            wordLength,
+            words
           );
           (e.target as HTMLInputElement).value = '';
       }
@@ -55,8 +58,9 @@ function handleGuess(
   setGuessCount: Function,
   setGuessLog: Function,
   wordLength: number,
+  words: Set<string>,
   ) {
-  if(guess.length !== password.length) {
+  if(!words.has(guess)) {
     alert("Invalid guess!");
     return 0;
   }
