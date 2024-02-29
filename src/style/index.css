@@ -12,15 +12,16 @@ body {
   padding-top: 1rem;
   padding-left: 1rem;
   background-color: black;
-  font-family: 'monospace';
+  font-family: 'fixedsys', 'monospace';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 p {
-  font-family: 'fixedsys', 'Share Tech Mono', 'Courier New', monospace;
+  font-family: 'fixedsys', 'Courier New', monospace;
   font-weight: normal;
   font-style: normal;
+  font-size: 1.4rem;
   margin-top: 0em;
   margin-bottom: 0em;
 }

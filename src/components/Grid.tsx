@@ -1,5 +1,8 @@
 import Column from "./Column";
 import JsonDictionary from '../dictionary/7_letter_words.json';
+import "../style/Grid.css"
+import { GlobalContext } from "./Context";
+import { useContext } from "react";
 
 
 interface GridProps {
@@ -8,12 +11,13 @@ interface GridProps {
 
 
 function Grid({grid}: GridProps) {
+  const { CHARACTERS_PER_COLUMN } = useContext(GlobalContext);
   return (
-    <div>
-      <Column data={grid.slice(0, grid.length / 2)}/>
-      <Column data={makeAddresses()} />
-      <Column data={grid.slice(grid.length / 2, grid.length)}/>
-      <Column data={makeAddresses()} />
+    <div className="grid">
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={grid.slice(0, grid.length / 2)}/>
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={grid.slice(grid.length / 2, grid.length)}/>
     </div>
   );
 }
@@ -25,8 +29,8 @@ export function makeGrid(
   numberOfWords: number, 
   wordLength: number
 ) {
-  const lengthOfGrid = totalRows * charactersPerColumn;
-  const allowedCharacters = `~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\`
+  const lengthOfGrid = totalRows * charactersPerColumn * 2;
+  const allowedCharacters = "~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\"
   let grid: string[] = [];
 
 		for(let i = 0; i < lengthOfGrid; i++) {
@@ -51,7 +55,7 @@ export function makeWords(numberOfWords: number) {
 }
 
 export function inputWords(grid: string[], words: Set<string>, numberOfWords: number, wordLength: number): string[] {
-  let frequency = grid.length / numberOfWords;
+  let frequency = Math.floor(grid.length / numberOfWords);
   let wordCount = 0;
   for(const word of words.values()) {
     let variation = Math.floor(Math.random() * (frequency - wordLength));
@@ -66,8 +70,11 @@ export function inputWords(grid: string[], words: Set<string>, numberOfWords: nu
 
 function makeAddresses(): string[] {
   let addresses: string[] = []
+  const maxHexValue = 0x10000;
+  const minHexValue = 0x1000;
+  const hexValuerange = maxHexValue - minHexValue;
   for(let i = 0; i < 17; i++) {
-    addresses.push(`0x${Math.floor((Math.random() * 0x10000)).toString(16)}`);
+    addresses.push(`0x${(Math.floor((Math.random() * hexValuerange)) + minHexValue).toString(16)}`);
   }
   return addresses;
 }
