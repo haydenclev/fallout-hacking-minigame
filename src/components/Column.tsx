@@ -1,6 +1,4 @@
-import { useContext } from "react";
-import "../style/Column.css"
-import { GlobalContext } from "./Context";
+import "../style/Column.css";
 
 
 interface ColumnProps {
@@ -11,17 +9,17 @@ interface ColumnProps {
 
 function Column({ charactersPerColumn, data, isAddresses = false }: ColumnProps) {
   let chunks: string[] = [];
-  if(!isAddresses) {
-    for(let i = 0; i < data.length; i += charactersPerColumn) {
+  if (!isAddresses) {
+    for (let i = 0; i < data.length; i += charactersPerColumn) {
       const chunk = data.slice(i, i + charactersPerColumn).join('');
       chunks.push(chunk);
     }
   }
   return (
     <div className="column">
-      {isAddresses ? 
+      {isAddresses ?
         data.map((address, index) => <p className="address" key={index}>{address}</p>) :
-         chunks.map((line, index) => <p key={index}>{line}</p>)
+        chunks.map((line, index) => <p key={index}>{line}</p>)
       }
     </div>
   );
