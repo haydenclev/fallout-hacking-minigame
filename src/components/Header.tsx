@@ -1,5 +1,4 @@
-import { isArrayLiteralExpression } from "typescript";
-import "../style/Header.css"
+import "../style/Header.css";
 
 interface HeaderProps {
   guessCount: number,
