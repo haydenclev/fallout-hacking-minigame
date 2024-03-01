@@ -3,3 +3,15 @@
   color: green;
   text-transform: uppercase;
 }
+
+.gridAndGuessLogAndInput {
+  display: flex;
+}
+
+.guessLogAndInput {
+  width: 25%;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

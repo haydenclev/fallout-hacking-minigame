@@ -7,9 +7,7 @@ function GuessLog({guessLog}: GuessLogProps) {
     <div>
       { guessLog.map((line, index) => {
         return ( 
-          <ul key={index}>
-            <p> {line} </p>
-          </ul>
+            <p key={index}> {">" + line} </p>
         )
       }) }
     </div>

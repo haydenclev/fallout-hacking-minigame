@@ -25,8 +25,6 @@ export default function UserInput({
 }: UserInputProps) {
   return (
     <input 
-      // min={7}
-      // max={7}
       onKeyDown={(e) => {
         if(e.key === "Enter") {
           const input = e.target as HTMLInputElement;
@@ -73,12 +71,12 @@ function handleGuess(
     setGameState(GameState.WIN);
   }
   else if(newGuessCount >= guessLimit) {
-    setGuessLog([...guessLog, guess, `Entry denied. Likeness = ${numberOfMatchingChars}`]);
+    setGuessLog([...guessLog, guess, ...["Entry denied.", `Likeness = ${numberOfMatchingChars}`]]);
     alert(" You lose!");
     setGameState(GameState.LOSE);
   }
   else {
-    setGuessLog([...guessLog, guess, `Entry denied. Likeness = ${numberOfMatchingChars}`]);
+    setGuessLog([...guessLog, guess, ...["Entry denied.", `Likeness = ${numberOfMatchingChars}`]]);
   }
   return numberOfMatchingChars;
 }
