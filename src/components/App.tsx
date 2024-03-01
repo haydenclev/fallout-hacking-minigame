@@ -22,26 +22,24 @@ export function App() {
 
   return (
     <div className="app">
-      <GlobalContext.Provider value={globalSettings}>
-        {gameState === GameState.IN_PROGRESS && <div>
-          <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
-          <Grid grid={grid} />
-          <GuessLog guessLog={guessLog} />
-          <UserInput
-            guessCount={guessCount}
-            guessLimit={GUESS_LIMIT}
-            guessLog={guessLog}
-            password={password}
-            setGameState={setGameState}
-            setGuessCount={setGuessCount}
-            setGuessLog={setGuessLog}
-            wordLength={WORD_LEN}
-            words={words}
-          />
-        </div>}
-        {gameState === GameState.LOSE && <p>Terminal Locked. Please contact an administrator.</p>}
-        {gameState === GameState.WIN && <p>Secrets of untold import.</p>}
-      </GlobalContext.Provider>
+      {gameState === GameState.IN_PROGRESS && <div>
+        <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
+        <Grid grid={grid} />
+        <GuessLog guessLog={guessLog} />
+        <UserInput
+          guessCount={guessCount}
+          guessLimit={GUESS_LIMIT}
+          guessLog={guessLog}
+          password={password}
+          setGameState={setGameState}
+          setGuessCount={setGuessCount}
+          setGuessLog={setGuessLog}
+          wordLength={WORD_LEN}
+          words={words}
+        />
+      </div>}
+      {gameState === GameState.LOSE && <p>Terminal Locked. Please contact an administrator.</p>}
+      {gameState === GameState.WIN && <p>Secrets of untold import.</p>}
     </div>
   );
 }
