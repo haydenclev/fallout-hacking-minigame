@@ -13,7 +13,7 @@ interface GridProps {
 function Grid({grid}: GridProps) {
   const { CHARACTERS_PER_COLUMN } = useContext(GlobalContext);
   return (
-    <div className="grid">
+    <div id="grid">
       <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />
       <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={grid.slice(0, grid.length / 2)}/>
       <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />

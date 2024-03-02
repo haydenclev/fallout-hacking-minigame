@@ -25,9 +25,9 @@ export function App() {
       {gameState === GameState.IN_PROGRESS &&
         <div>
           <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
-          <div className="gridAndGuessLogAndInput">
+          <div id="gridAndGuessLogAndInput">
             <Grid grid={grid} />
-            <div className="guessLogAndInput" >
+            <div id="guessLogAndInput" >
               <GuessLog guessLog={guessLog} />
               <UserInput
                 guessCount={guessCount}

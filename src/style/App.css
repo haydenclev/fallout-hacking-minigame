@@ -1,8 +1,8 @@
-.gridAndGuessLogAndInput {
+#gridAndGuessLogAndInput {
   display: flex;
 }
 
-.guessLogAndInput {
+#guessLogAndInput {
   width: 25%;
   padding-left: 1rem;
   display: flex;
