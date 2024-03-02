@@ -2,7 +2,7 @@ import Column from "./Column";
 import JsonDictionary from '../dictionary/7_letter_words.json';
 import "../style/Grid.css"
 import { GlobalContext } from "./Context";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 
 
 interface GridProps {
@@ -12,11 +12,13 @@ interface GridProps {
 
 function Grid({grid}: GridProps) {
   const { CHARACTERS_PER_COLUMN } = useContext(GlobalContext);
+  const addressesLeft = useRef(makeAddresses()).current;
+  const addressesRight = useRef(makeAddresses()).current;
   return (
     <div id="grid">
-      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={addressesLeft} isAddresses={true} />
       <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={grid.slice(0, grid.length / 2)}/>
-      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={makeAddresses()} isAddresses={true} />
+      <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={addressesRight} isAddresses={true} />
       <Column charactersPerColumn={CHARACTERS_PER_COLUMN} data={grid.slice(grid.length / 2, grid.length)}/>
     </div>
   );
