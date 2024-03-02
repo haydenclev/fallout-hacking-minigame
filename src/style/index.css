@@ -4,24 +4,28 @@
     url('fonts/fsex300-webfont.woff2') format('woff2'),                                              
     url('fonts/fsex300-webfont.woff') format('woff');                                                
   font-weight: normal;                                                                            
-  font-style: normal;                                                                             
-                                                                                                  
+  font-style: normal;                                                                                                                                        
 } 
 
 body {
   padding-top: 1rem;
   padding-left: 1rem;
-  background-color: black;
-  font-family: 'fixedsys', 'monospace';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-p {
+body, input {
+  background-color: black;
+  color: green;
   font-family: 'fixedsys', 'Courier New', monospace;
   font-weight: normal;
   font-style: normal;
   font-size: 1.4rem;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+p {
   margin-top: 0em;
   margin-bottom: 0em;
 }

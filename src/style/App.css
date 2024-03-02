@@ -1,9 +1,3 @@
-.app {
-  text-align: left;
-  color: green;
-  text-transform: uppercase;
-}
-
 .gridAndGuessLogAndInput {
   display: flex;
 }
