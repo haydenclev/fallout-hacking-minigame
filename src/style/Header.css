@@ -2,3 +2,13 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+
+.blink {
+  animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
