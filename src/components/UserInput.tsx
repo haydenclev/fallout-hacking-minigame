@@ -29,7 +29,7 @@ export default function UserInput({
         if(e.key === "Enter") {
           const input = e.target as HTMLInputElement;
           handleGuess(
-            input.value,
+            input.value.toLowerCase(),
             guessCount,
             guessLimit,
             guessLog,
