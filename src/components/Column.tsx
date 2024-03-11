@@ -8,7 +8,7 @@ interface ColumnProps {
 }
 
 function Column({ charactersPerColumn, data, isAddresses = false }: ColumnProps) {
-  let chunks: string[] = [];
+  const chunks: string[] = [];
   if (!isAddresses) {
     for (let i = 0; i < data.length; i += charactersPerColumn) {
       const chunk = data.slice(i, i + charactersPerColumn).join('');

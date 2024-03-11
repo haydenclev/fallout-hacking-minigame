@@ -12,9 +12,9 @@ export function App() {
   const globalSettings = useContext(GlobalContext);
   const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_COLUMN, WORD_LEN, GUESS_LIMIT } = globalSettings;
 
-  let [guessLog, setGuessLog] = useState<string[]>([]);
-  let [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
-  let [guessCount, setGuessCount] = useState<number>(0);
+  const [guessLog, setGuessLog] = useState<string[]>([]);
+  const [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
+  const [guessCount, setGuessCount] = useState<number>(0);
 
   const words = useRef(makeWords(NUM_WORDS)).current;
   const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_COLUMN, NUM_WORDS, WORD_LEN)).current;

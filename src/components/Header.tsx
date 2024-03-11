@@ -10,7 +10,7 @@ function Header({ guessCount, guessLimit }: HeaderProps) {
   const warningMessage = "!!! warning: lockout imminent !!!";
   const regularMesage = "password required";
   const squareCharacter = "\u25A0";
-  let attemptsArray = new Array(guessLimit - guessCount).fill(squareCharacter);
+  const attemptsArray = new Array(guessLimit - guessCount).fill(squareCharacter);
 
   const displaywarningMessage = guessLimit - guessCount === 1 ? true : false;
   return (

@@ -33,7 +33,7 @@ export function makeGrid(
 ) {
   const lengthOfGrid = totalRows * charactersPerColumn * 2;
   const allowedCharacters = "~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\"
-  let grid: string[] = [];
+  const grid: string[] = [];
 
 		for(let i = 0; i < lengthOfGrid; i++) {
 			const randomInt = Math.floor(Math.random() * allowedCharacters.length);
@@ -44,11 +44,11 @@ export function makeGrid(
 }
 
 export function makeWords(numberOfWords: number) {
-  let words: Set<string> = new Set();
+  const words: Set<string> = new Set();
   const dictionary: string[] = JsonDictionary.map((x) => { return x.word});
   while(words.size < numberOfWords) {
-    let randomInt = Math.floor(Math.random() * dictionary.length);
-    let word = dictionary[randomInt];
+    const randomInt = Math.floor(Math.random() * dictionary.length);
+    const word = dictionary[randomInt];
     if(!words.has(word)) {
       words.add(word);
     }
@@ -57,11 +57,11 @@ export function makeWords(numberOfWords: number) {
 }
 
 export function inputWords(grid: string[], words: Set<string>, numberOfWords: number, wordLength: number): string[] {
-  let frequency = Math.floor(grid.length / numberOfWords);
+  const frequency = Math.floor(grid.length / numberOfWords);
   let wordCount = 0;
   for(const word of words.values()) {
-    let variation = Math.floor(Math.random() * (frequency - wordLength));
-    let placement = (wordCount * frequency) + variation;
+    const variation = Math.floor(Math.random() * (frequency - wordLength));
+    const placement = (wordCount * frequency) + variation;
     for(let i = 0; i < wordLength; i++) {
       grid[placement + i] = word[i];
     }
@@ -71,7 +71,7 @@ export function inputWords(grid: string[], words: Set<string>, numberOfWords: nu
 }
 
 function makeAddresses(): string[] {
-  let addresses: string[] = []
+  const addresses: string[] = []
   const maxHexValue = 0x10000;
   const minHexValue = 0x1000;
   const hexValuerange = maxHexValue - minHexValue;

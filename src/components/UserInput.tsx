@@ -5,9 +5,9 @@ interface UserInputProps {
   guessLimit: number,
   guessLog: string[],
   password: string,
-  setGameState: Function,
-  setGuessCount: Function,
-  setGuessLog: Function,
+  setGameState: (state: GameState) => void,
+  setGuessCount: (count: number) => void,
+  setGuessLog: (log: string[]) => void,
   wordLength: number,
   words: Set<string>,
 }
@@ -52,17 +52,17 @@ function handleGuess(
   guessLimit: number,
   guessLog: string[],
   password: string,
-  setGameState: Function,
-  setGuessCount: Function,
-  setGuessLog: Function,
+  setGameState: (state: GameState) => void,
+  setGuessCount: (count: number) => void,
+  setGuessLog: (log: string[]) => void,
   wordLength: number,
   words: Set<string>,
-  ) {
+  ): number {
   if(!words.has(guess)) {
     alert("Invalid guess!");
     return 0;
   }
-  let numberOfMatchingChars = likeness(guess, password);
+  const numberOfMatchingChars = likeness(guess, password);
   const newGuessCount = guessCount + 1;
   setGuessCount(newGuessCount);
   if(numberOfMatchingChars === wordLength) {
