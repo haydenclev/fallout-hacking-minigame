@@ -8,7 +8,4 @@ it('renders without crashing', () => {
   ReactDOM.render(<App />, div);
 });
 
-
 // export {} // makes file module to remove compile error
-
-
