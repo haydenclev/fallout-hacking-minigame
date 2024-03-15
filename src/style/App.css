@@ -9,3 +9,8 @@
   flex-direction: column;
   justify-content: flex-end;
 }
+
+#content {
+  margin-left: 18rem;
+  margin-top: 7rem;
+}

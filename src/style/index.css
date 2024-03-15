@@ -4,10 +4,14 @@
     url('fonts/fsex300-webfont.woff2') format('woff2'),                                              
     url('fonts/fsex300-webfont.woff') format('woff');                                                
   font-weight: normal;                                                                            
-  font-style: normal;                                                                                                                                        
+  font-style: normal;        
 } 
 
 body {
+  /* background-color: none; */
+  background-image: url('resources/blank-terminal.png');
+  /* background-size: auto; */
+  background-repeat: no-repeat;
   padding-top: 1rem;
   padding-left: 1rem;
   -webkit-font-smoothing: antialiased;
@@ -15,14 +19,17 @@ body {
 }
 
 body, input {
-  background-color: black;
   color: green;
   font-family: 'fixedsys', 'Courier New', monospace;
   font-weight: normal;
   font-style: normal;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
   text-align: left;
+}
+
+input {
+  background-color: black;
 }
 
 p {

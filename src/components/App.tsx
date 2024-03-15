@@ -21,7 +21,7 @@ export function App() {
   const password = useRef(choosePassword(words)).current;
 
   return (
-    <div>
+    <div id="content">
       {gameState === GameState.IN_PROGRESS &&
         <div>
           <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
