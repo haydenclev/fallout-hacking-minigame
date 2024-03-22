@@ -6,6 +6,7 @@ import GuessLog from './GuessLog';
 import Header from './Header';
 import UserInput from './UserInput';
 import { GameState } from '../utils';
+import ResetButton from './ResetButton';
 
 
 export function App() {
@@ -45,6 +46,7 @@ export function App() {
         </div>}
       {gameState === GameState.LOSE && <p>Terminal Locked. Please contact an administrator.</p>}
       {gameState === GameState.WIN && <p>Secrets of untold import.</p>}
+      <ResetButton/>
     </div>
   );
 }
