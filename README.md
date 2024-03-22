@@ -4,11 +4,19 @@ This repository hosts a recreation of the RobCo Industries terminal [hacking](ht
 
 ## How to play
 
+The application is currently being hosted [here](https://haydenclev.github.io/fallout-hacking-minigame/) via GitHub Pages.
+
 Use the input field to guess the password from various words on the screen.
 The program will tell you how many letters are both correct *and* in the right place.
 You only have four guesses so think carefully!
 
 Use the "power" button to reset the game.
+
+## Issues and Contributing
+
+For problems and feedback please see the Issues tracker for already open tickets. You are welcome to open an issue there for any suggested changes.
+
+Pull requests are also welcome. Please open an issue first to discuss what you would like to change and make sure to update tests as appropriate.
 
 ## Run Locally
 
@@ -25,8 +33,3 @@ And finally run locally with
 ```bash
 npm run start
 ```
-## Issues and Contributing
-
-For problems and feedback please see the Issues tracker for already open tickets. You are welcome to open an issue there for any suggested changes.
-
-Pull requests are also welcome. Please open an issue first to discuss what you would like to change and make sure to update tests as appropriate.
