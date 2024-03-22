@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/fallout-hacking-minigame/static/css/main.87da745f.css",
+    "main.js": "/fallout-hacking-minigame/static/js/main.4fa9160c.js",
+    "static/js/592.210cd53f.chunk.js": "/fallout-hacking-minigame/static/js/592.210cd53f.chunk.js",
+    "static/media/blank-terminal.png": "/fallout-hacking-minigame/static/media/blank-terminal.8171edfd8cb5918d8cc6.png",
+    "static/media/fsex300-webfont.woff": "/fallout-hacking-minigame/static/media/fsex300-webfont.2c4ef4186cc5b45fb63a.woff",
+    "static/media/fsex300-webfont.woff2": "/fallout-hacking-minigame/static/media/fsex300-webfont.96ac81262a9cbf7241fe.woff2",
+    "index.html": "/fallout-hacking-minigame/index.html",
+    "main.87da745f.css.map": "/fallout-hacking-minigame/static/css/main.87da745f.css.map",
+    "main.4fa9160c.js.map": "/fallout-hacking-minigame/static/js/main.4fa9160c.js.map",
+    "592.210cd53f.chunk.js.map": "/fallout-hacking-minigame/static/js/592.210cd53f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.87da745f.css",
+    "static/js/main.4fa9160c.js"
+  ]
+}
