@@ -14,7 +14,7 @@ function Header({ guessCount, guessLimit }: HeaderProps) {
 
   const displaywarningMessage = guessLimit - guessCount === 1 ? true : false;
   return (
-    <div>
+    <div id="header">
       <p>{headerMessage}</p>
       {displaywarningMessage ? <p className="blink">{warningMessage}</p> : <p>{regularMesage}</p>}
       <p id="attempts">attempt(s) remaining: {attemptsArray.join(" ")}</p>

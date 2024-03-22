@@ -8,9 +8,7 @@
 } 
 
 body {
-  /* background-color: none; */
   background-image: url('resources/blank-terminal.png');
-  /* background-size: auto; */
   background-repeat: no-repeat;
   padding-top: 1rem;
   padding-left: 1rem;

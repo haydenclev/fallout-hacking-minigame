@@ -3,7 +3,6 @@
 }
 
 #guessLogAndInput {
-  width: 25%;
   padding-left: 1rem;
   display: flex;
   flex-direction: column;
@@ -13,4 +12,5 @@
 #content {
   margin-left: 18rem;
   margin-top: 7rem;
+  display: flex;
 }
