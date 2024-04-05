@@ -12,6 +12,7 @@ body {
   background-repeat: no-repeat;
   padding-top: 1rem;
   padding-left: 1rem;
+  cursor: default;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
