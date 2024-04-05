@@ -3,3 +3,8 @@
   text-wrap: nowrap;
   word-break: break-all;
 }
+
+.characters:hover {
+  background-color: green;
+  color: black;
+}

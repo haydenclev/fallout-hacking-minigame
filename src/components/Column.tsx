@@ -19,7 +19,9 @@ function Column({ charactersPerColumn, data, isAddresses = false }: ColumnProps)
     <div className="column">
       {isAddresses ?
         data.map((address, index) => <p className="address" key={index}>{address}</p>) :
-        chunks.map((line, index) => <p key={index}>{line}</p>)
+        chunks.map((line, index) =>
+         <p key={index}>{Array.from(line).map(character =>
+           <span className="characters">{character}</span>)}</p>)
       }
     </div>
   );
