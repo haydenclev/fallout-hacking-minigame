@@ -28,11 +28,11 @@ function Grid({ grid, words }: GridProps) {
 export function makeGrid(
   words: string[], 
   totalRows: number, 
-  charactersPerColumn: number, 
+  charactersPerRow: number, 
   numberOfWords: number, 
   wordLength: number
 ) {
-  const lengthOfGrid = totalRows * charactersPerColumn * 2;
+  const lengthOfGrid = totalRows * charactersPerRow * 2;
   const allowedCharacters = "~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\"
   const grid: string[] = [];
 

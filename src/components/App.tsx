@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react';
 import '../style/App.css';
-import { GlobalContext } from './Context';
+import { GlobalContext, verifySettings } from './Context';
 import Grid, { makeGrid, makeWords } from './Grid';
 import GuessLog from './GuessLog';
 import Header from './Header';
@@ -11,14 +11,15 @@ import ResetButton from './ResetButton';
 
 export function App() {
   const globalSettings = useContext(GlobalContext);
-  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_COLUMN, WORD_LEN, GUESS_LIMIT } = globalSettings;
+  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_ROW, WORD_LEN, GUESS_LIMIT } = globalSettings;
+  verifySettings(CHARACTERS_PER_ROW, NUM_WORDS, TOTAL_ROWS, WORD_LEN);
 
   const [guessLog, setGuessLog] = useState<string[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
   const [guessCount, setGuessCount] = useState<number>(0);
 
   const words = useRef(makeWords(NUM_WORDS)).current;
-  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_COLUMN, NUM_WORDS, WORD_LEN)).current;
+  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN)).current;
   const password = useRef(choosePassword(words)).current;
 
   return (
