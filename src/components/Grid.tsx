@@ -6,26 +6,27 @@ import Memory from "./Memory";
 
 
 interface GridProps {
-  grid: string[]
+  grid: string[],
+  words: string[]
 }
 
-
-function Grid({grid}: GridProps) {
+function Grid({ grid, words }: GridProps) {
   const addressesLeft = useRef(makeAddresses()).current;
   const addressesRight = useRef(makeAddresses()).current;
-  const halfGrid = Math.floor(grid.length / 2)
+  const halfGrid = Math.floor(grid.length / 2);
+  const halfWords = Math.floor(words.length / 2);
   return (
     <div id="grid">
       <Addresses addresses={addressesLeft} />
-      <Memory data={grid.slice(0, halfGrid)} />
+      <Memory data={grid.slice(0, halfGrid)} words={words.slice(0, halfWords)} />
       <Addresses addresses={addressesRight} />
-      <Memory data={grid.slice(halfGrid, grid.length)} />
+      <Memory data={grid.slice(halfGrid, grid.length)} words={words.slice(halfWords, words.length)} />
     </div>
   );
 }
 
 export function makeGrid(
-  words: Set<string>, 
+  words: string[], 
   totalRows: number, 
   charactersPerColumn: number, 
   numberOfWords: number, 
@@ -53,13 +54,13 @@ export function makeWords(numberOfWords: number) {
       words.add(word);
     }
   }
-  return words;
+  return Array.from(words);
 }
 
-export function inputWords(grid: string[], words: Set<string>, numberOfWords: number, wordLength: number): string[] {
+export function inputWords(grid: string[], words: string[], numberOfWords: number, wordLength: number): string[] {
   const frequency = Math.floor(grid.length / numberOfWords);
   let wordCount = 0;
-  for(const word of words.values()) {
+  for(const word of words) {
     const variation = Math.floor(Math.random() * (frequency - wordLength));
     const placement = (wordCount * frequency) + variation;
     for(let i = 0; i < wordLength; i++) {

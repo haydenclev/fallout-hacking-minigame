@@ -27,7 +27,7 @@ export function App() {
         <div>
           <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
           <div id="gridAndGuessLogAndInput">
-            <Grid grid={grid} />
+            <Grid grid={grid} words={words} />
             <div id="guessLogAndInput" >
               <GuessLog guessLog={guessLog} />
               <UserInput
@@ -51,8 +51,8 @@ export function App() {
   );
 }
 
-function choosePassword(words: Set<string>): string {
-  return Array.from(words.values())[Math.floor(Math.random() * words.size)];
+function choosePassword(words: string[]): string {
+  return words[Math.floor(Math.random() * words.length)];
 }
 
 export default App;
