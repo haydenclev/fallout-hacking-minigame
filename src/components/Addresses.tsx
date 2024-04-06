@@ -1,5 +1,6 @@
 import "../style/Column.css";
 
+
 interface AddressesProps {
   addresses: string[]
 }

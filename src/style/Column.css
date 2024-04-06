@@ -4,7 +4,7 @@
   word-break: break-all;
 }
 
-.characters:hover {
+.character:hover, .word-hovered {
   background-color: green;
   color: black;
 }

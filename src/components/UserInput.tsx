@@ -9,7 +9,7 @@ interface UserInputProps {
   setGuessCount: (count: number) => void,
   setGuessLog: (log: string[]) => void,
   wordLength: number,
-  words: Set<string>,
+  words: string[],
 }
 
 export default function UserInput({
@@ -56,9 +56,9 @@ function handleGuess(
   setGuessCount: (count: number) => void,
   setGuessLog: (log: string[]) => void,
   wordLength: number,
-  words: Set<string>,
+  words: string[],
   ): number {
-  if(!words.has(guess)) {
+  if(!words.includes(guess)) {
     alert("Invalid guess!");
     return 0;
   }
