@@ -12,7 +12,7 @@ let wordCharIndex = 0;
 
 function Memory({ data, words }: MemoryProps) {
   useEffect(() => addWordSelectionCSS(words), []);
-  const { WORD_LEN, CHARACTERS_PER_COLUMN } = useContext(GlobalContext)
+  const { WORD_LEN, CHARACTERS_PER_ROW: CHARACTERS_PER_COLUMN } = useContext(GlobalContext)
   const chunks: string[] = [];
   for (let i = 0; i < data.length; i += CHARACTERS_PER_COLUMN) {
     const chunk = data.slice(i, i + CHARACTERS_PER_COLUMN).join('');
