@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import "../style/Column.css";
+import "../style/Grid.css";
 import { GlobalContext } from "./Context";
 
 

@@ -1,4 +1,4 @@
-import "../style/Column.css";
+import "../style/Grid.css";
 
 
 interface AddressesProps {

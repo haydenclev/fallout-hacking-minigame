@@ -3,3 +3,14 @@
   grid-template-columns: 1fr 2fr 1fr 2fr;
   column-gap: 1em;
 }
+
+.column {
+  display: inline-block;
+  text-wrap: nowrap;
+  word-break: break-all;
+}
+
+.character:hover, .word-hovered {
+  background-color: green;
+  color: black;
+}
