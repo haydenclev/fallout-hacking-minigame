@@ -65,10 +65,10 @@ function handleGuess(
   setGuessLog: (log: string[]) => void,
   wordLength: number,
   words: string[],
-): number {
+) {
   if (!words.includes(guess)) {
     alert("Invalid guess!");
-    return 0;
+    return;
   }
   const numberOfMatchingChars = likeness(guess, password);
   const newGuessCount = guessCount + 1;
@@ -86,7 +86,7 @@ function handleGuess(
   else {
     setGuessLog([...guessLog, guess, ...["Entry denied.", `Likeness = ${numberOfMatchingChars}`]]);
   }
-  return numberOfMatchingChars;
+  return;
 }
 
 function likeness(guess: string, password: string) {
