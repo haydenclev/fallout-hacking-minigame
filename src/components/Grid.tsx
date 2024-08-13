@@ -33,7 +33,7 @@ export function makeGrid(
   wordLength: number
 ) {
   const lengthOfGrid = totalRows * charactersPerRow * 2;
-  const allowedCharacters = "~!@#$%^&*()_-=+|]}[{;:}]/?.>,<\\"
+  const allowedCharacters = "~!@#$%^&*()_-=+|'\"[{;:}]/?.>,<\\"
   const grid: string[] = [];
 
 		for(let i = 0; i < lengthOfGrid; i++) {
@@ -57,7 +57,7 @@ export function makeWords(numberOfWords: number) {
   return Array.from(words);
 }
 
-export function inputWords(grid: string[], words: string[], numberOfWords: number, wordLength: number): string[] {
+function inputWords(grid: string[], words: string[], numberOfWords: number, wordLength: number): string[] {
   const frequency = Math.floor(grid.length / numberOfWords);
   let wordCount = 0;
   for(const word of words) {

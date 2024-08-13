@@ -22,7 +22,11 @@ function Memory({ data, words }: MemoryProps) {
     <div className="column">
       {chunks.map((line, index) =>
         <p key={index}>{Array.from(line).map((character, index) => 
-          <span className={applyClassNames(character, words, WORD_LEN)} key={index}>{character}</span>
+          <span 
+            data-testid={isLetter(character) ? getWord(words, WORD_LEN, wordCharIndex) : null}
+            className={applyClassNames(character, words, WORD_LEN)}
+            key={index}>{character}
+          </span>
           )}</p>
           )}
     </div>

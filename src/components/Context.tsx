@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-const globalSettings = {
+export const globalSettings = {
   CHARACTERS_PER_ROW: 12,
   GUESS_LIMIT: 4,
   NUM_WORDS: 12,

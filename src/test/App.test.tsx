@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { App } from '../components/App';
 import { GlobalContext } from '../components/Context';
+import { globalSettings } from '../components/Context';
 
 
 it('renders without crashing', () => {
@@ -15,14 +16,6 @@ describe('global context', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   })
-
-  const globalSettings = {
-    CHARACTERS_PER_ROW: 12,
-    GUESS_LIMIT: 4,
-    NUM_WORDS: 12,
-    TOTAL_ROWS: 17,
-    WORD_LEN: 7,
-  }
 
   it('fails when words cant fit in grid', () => {
     expect(() => {
