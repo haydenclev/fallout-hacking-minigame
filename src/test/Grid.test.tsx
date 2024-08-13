@@ -1,18 +1,13 @@
 import { render } from '@testing-library/react';
-import Grid, { makeGrid, makeWords } from '../components/Grid';
+import Grid from '../components/Grid';
+import { makeWords } from '../components/App'
 import { globalSettings } from '../components/Context';
 
 const words = makeWords(globalSettings.NUM_WORDS);
-const grid = makeGrid(
-  words, globalSettings.TOTAL_ROWS, 
-  globalSettings.CHARACTERS_PER_ROW, 
-  globalSettings.NUM_WORDS, 
-  globalSettings.WORD_LEN
-);
 
 it('puts all the words into the grid', () => {
   const gridComponent = render(
-      <Grid grid={grid} words={words}/>
+      <Grid words={words}/>
   )
   for(const word of words) {
     const letters = gridComponent.getAllByTestId(word)

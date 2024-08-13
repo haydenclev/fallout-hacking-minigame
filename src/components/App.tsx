@@ -1,12 +1,13 @@
 import { useContext, useRef, useState } from 'react';
+import JsonDictionary from '../dictionary/7_letter_words.json';
 import '../style/App.css';
+import { GameState } from '../utils';
 import { GlobalContext, verifySettings } from './Context';
-import Grid, { makeGrid, makeWords } from './Grid';
+import Grid from './Grid';
 import GuessLog from './GuessLog';
 import Header from './Header';
-import UserInput from './UserInput';
-import { GameState } from '../utils';
 import ResetButton from './ResetButton';
+import UserInput from './UserInput';
 
 
 export function App() {
@@ -19,7 +20,6 @@ export function App() {
   const [guessCount, setGuessCount] = useState<number>(0);
 
   const words = useRef(makeWords(NUM_WORDS)).current;
-  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN)).current;
   const password = useRef(choosePassword(words)).current;
 
   return (
@@ -28,7 +28,7 @@ export function App() {
         <div>
           <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
           <div id="gridAndGuessLogAndInput">
-            <Grid grid={grid} words={words} />
+            <Grid words={words} />
             <div id="guessLogAndInput" >
               <GuessLog guessLog={guessLog} />
               <UserInput
@@ -54,6 +54,19 @@ export function App() {
 
 function choosePassword(words: string[]): string {
   return words[Math.floor(Math.random() * words.length)];
+}
+
+export function makeWords(numberOfWords: number) {
+  const words: Set<string> = new Set();
+  const dictionary: string[] = JsonDictionary.map((x) => { return x.word});
+  while(words.size < numberOfWords) {
+    const randomInt = Math.floor(Math.random() * dictionary.length);
+    const word = dictionary[randomInt];
+    if(!words.has(word)) {
+      words.add(word);
+    }
+  }
+  return Array.from(words);
 }
 
 export default App;

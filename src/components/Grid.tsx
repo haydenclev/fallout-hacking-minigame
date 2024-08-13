@@ -1,16 +1,18 @@
-import { useRef } from "react";
-import JsonDictionary from '../dictionary/7_letter_words.json';
+import { useContext, useRef } from "react";
 import "../style/Grid.css";
 import Addresses from "./Addresses";
 import Memory from "./Memory";
+import { GlobalContext } from "./Context";
 
 
 interface GridProps {
-  grid: string[],
   words: string[]
 }
 
-function Grid({ grid, words }: GridProps) {
+function Grid({ words }: GridProps) {
+  const globalSettings = useContext(GlobalContext);
+  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_ROW, WORD_LEN } = globalSettings;
+  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN)).current;
   const addressesLeft = useRef(makeAddresses()).current;
   const addressesRight = useRef(makeAddresses()).current;
   const halfGrid = Math.floor(grid.length / 2);
@@ -42,19 +44,6 @@ export function makeGrid(
 		}
 
     return inputWords(grid, words, numberOfWords, wordLength);
-}
-
-export function makeWords(numberOfWords: number) {
-  const words: Set<string> = new Set();
-  const dictionary: string[] = JsonDictionary.map((x) => { return x.word});
-  while(words.size < numberOfWords) {
-    const randomInt = Math.floor(Math.random() * dictionary.length);
-    const word = dictionary[randomInt];
-    if(!words.has(word)) {
-      words.add(word);
-    }
-  }
-  return Array.from(words);
 }
 
 function inputWords(grid: string[], words: string[], numberOfWords: number, wordLength: number): string[] {
