@@ -6,7 +6,7 @@ This repository hosts a recreation of the RobCo Industries terminal [hacking](ht
 
 The application is currently being hosted [here](https://haydenclev.github.io/fallout-hacking-minigame/) via GitHub Pages.
 
-Use the input field to guess the password from various words on the screen.
+Use the mouse or input field to guess the password from various words on the screen.
 The program will tell you how many letters are both correct *and* in the right place.
 You only have four guesses so think carefully!
 
