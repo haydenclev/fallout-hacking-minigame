@@ -8,26 +8,28 @@ interface MemoryProps {
   words: string[],
 }
 
-let wordCharIndex = 0;
 
 function Memory({ data, words }: MemoryProps) {
+  let wordCharIndex = 0;
   useEffect(() => addWordSelectionCSS(words), []);
-  const { WORD_LEN, CHARACTERS_PER_ROW: CHARACTERS_PER_COLUMN } = useContext(GlobalContext)
-  const chunks: [string, Map<number, string>][] = [];
+  const { CHARACTERS_PER_ROW: CHARACTERS_PER_COLUMN } = useContext(GlobalContext)
+  const chunks: [string, Map<number, string[]>][] = [];
   const cheatCodes = new Set<string>();
   for (let i = 0; i < data.length; i += CHARACTERS_PER_COLUMN) {
     const chunk = data.slice(i, i + CHARACTERS_PER_COLUMN).join('');
-    const cheatCodeMap = getCheatCodes(chunk, cheatCodes);
-    chunks.push([chunk, cheatCodeMap]);
+    const classNames = new Map<number, string[]>();
+    wordCharIndex = makeWordClasses(chunk, words, wordCharIndex, classNames);
+    makeCheatCodeClasses(chunk, cheatCodes, classNames);
+    chunks.push([chunk, classNames]);
   }
   useEffect(() => addWordSelectionCSS([...cheatCodes.values()]), []);
   return (
     <div className="column">
-      {chunks.map(([line, cheats], index) =>
+      {chunks.map(([line, classes], index) =>
         <p key={index}>{Array.from(line).map((character, index) => 
           <span 
-            data-testid={isLetter(character) ? getWord(words, WORD_LEN, wordCharIndex) : null}
-            className={applyClassNames(character, words, WORD_LEN, cheats, index)}
+            data-testid={isLetter(character) ? classes.get(index)?.at(0) : null}
+            className={applyClassNames(classes, index)}
             key={index}>{character}
           </span>
           )}</p>
@@ -36,8 +38,7 @@ function Memory({ data, words }: MemoryProps) {
   );
 }
 
-function getCheatCodes(chunk: string, cheatCodes: Set<string>): Map<number, string> {
-  const cheatCodeMap = new Map<number, string>();
+function makeCheatCodeClasses(chunk: string, cheatCodes: Set<string>, classNames: Map<number, string[]>) {
   let bracketMap: { [key: string]: number[] } = {};
     for (let i = 0; i < chunk.length; i++) {
       if (isOpenBracket(chunk[i])) {
@@ -54,32 +55,38 @@ function getCheatCodes(chunk: string, cheatCodes: Set<string>): Map<number, stri
         const cheatCode = chunk.slice(startIndex, i+1)
         cheatCodes.add(cheatCode);
         for (let j = startIndex; j <= i; j++) {
-          cheatCodeMap.set(j, cheatCode);
+          if (!classNames.has(j)) {
+            classNames.set(j, []);
+          }
+          classNames.get(j)?.push(cheatCode);
         }
       }
     }
-    return cheatCodeMap;
 }
 
+function makeWordClasses(chunk: string, words: string[], wordCharIndex: number, classNames: Map<number, string[]>): number {
+  for (let i = 0; i < chunk.length; i++) {
+    if (isLetter(chunk[i])) {
+      if (!classNames.has(i)) {
+        classNames.set(i, []);
+      }
+      classNames.get(i)?.push(getWord(words, wordCharIndex));
+      wordCharIndex++;
+    }
+  }
+  return wordCharIndex;
+}
+
+
 function applyClassNames(
-  character: string,
-  words: string[],
-  wordLength: number,
-  cheats: Map<number, string>,
+  classes: Map<number, string[]>,
   index: number,
 ): string {
   let classNames = "character";
-  if (isLetter(character)) {
-    classNames += ` ${getWord(words, wordLength, wordCharIndex)}`;
-    wordCharIndex++;
-    if (wordCharIndex >= words.length * wordLength) {
-      wordCharIndex = 0;
-    }
+  if (classes.has(index)) {
+    classNames += ` ${classes.get(index)?.join(' ')}`
   }
-  if (cheats.has(index)) {
-    classNames += ` ${cheats.get(index)}`
-  }
-  return classNames
+  return classNames;
 }
 
 function addWordSelectionCSS(words: string[]) {
@@ -96,7 +103,8 @@ function addWordSelectionCSS(words: string[]) {
   }
 }
 
-function getWord(words: string[], wordLength: number, wordCharIndex: number): string {
+function getWord(words: string[], wordCharIndex: number): string {
+  const wordLength = words[0].length;
   const index = Math.floor(wordCharIndex / wordLength)
   return words[index]
 }
