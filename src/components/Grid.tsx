@@ -1,18 +1,21 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import "../style/Grid.css";
 import Addresses from "./Addresses";
-import Memory from "./Memory";
-import { GlobalContext } from "./Context";
+import Memory, { isLetter } from "./Memory";
 
 
 interface GridProps {
-  words: string[]
+  words: string[],
+  grid: string[],
+  cheatCodes: CheatCodes,
 }
 
-function Grid({ words }: GridProps) {
-  const globalSettings = useContext(GlobalContext);
-  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_ROW, WORD_LEN } = globalSettings;
-  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN)).current;
+export interface CheatCodes {
+  left: string[],
+  right: string[],
+}
+
+function Grid({ words, grid, cheatCodes }: GridProps) {
   const addressesLeft = useRef(makeAddresses()).current;
   const addressesRight = useRef(makeAddresses()).current;
   const halfGrid = Math.floor(grid.length / 2);
@@ -20,11 +23,45 @@ function Grid({ words }: GridProps) {
   return (
     <div id="grid">
       <Addresses addresses={addressesLeft} />
-      <Memory data={grid.slice(0, halfGrid)} words={words.slice(0, halfWords)} />
+      <Memory data={grid.slice(0, halfGrid)} words={words.slice(0, halfWords)} cheatCodes={cheatCodes.left} />
       <Addresses addresses={addressesRight} />
-      <Memory data={grid.slice(halfGrid, grid.length)} words={words.slice(halfWords, words.length)} />
+      <Memory data={grid.slice(halfGrid, grid.length)} words={words.slice(halfWords, words.length)} cheatCodes={cheatCodes.right} />
     </div>
   );
+}
+
+export function identifyCheatCodes(grid: string[], charactersPerRow: number): CheatCodes {
+  const cheatCodes: CheatCodes = {left: [], right: []}
+  let halfCheatCodes: string[] = [];
+  for (let i = 0; i < grid.length; i += charactersPerRow) {
+    const chunk = grid.slice(i, i + charactersPerRow).join('');
+    let bracketMap: { [key: string]: number } = {};
+    const cheatCodeMap = new Map<string, string>();
+    for (let i = 0; i < chunk.length; i++) {
+        if (isOpenBracket(chunk[i])) {
+          if (!bracketMap[chunk[i]]) {
+            bracketMap[chunk[i]] = i;
+          }
+        }
+        else if (isLetter(chunk[i])) {
+          bracketMap = {};
+        }
+        else if (isCompleteCheatCode(bracketMap, chunk[i])) {
+          const startIndex = bracketMap[matchingBracket(chunk[i])];
+          const cheatCode = chunk.slice(startIndex, i+1);
+          cheatCodeMap.set(chunk[i], cheatCode);
+        }
+      }
+      for (const cheatCode of cheatCodeMap.values()) {
+        halfCheatCodes.push(cheatCode);
+      }
+      if (i == grid.length / 2) {
+        cheatCodes.left = halfCheatCodes;
+        halfCheatCodes = [];
+      }
+    }
+    cheatCodes.right = halfCheatCodes;
+    return cheatCodes;
 }
 
 export function makeGrid(
@@ -69,6 +106,35 @@ function makeAddresses(): string[] {
     addresses.push(`0x${(Math.floor((Math.random() * hexValuerange)) + minHexValue).toString(16)}`);
   }
   return addresses;
+}
+
+
+function isOpenBracket(character: string): boolean {
+  const openBracketChars = '[{<(';
+  return openBracketChars.includes(character);
+}
+
+function isCloseBracket(character: string): boolean {
+  const closeBracketChars = ']}>)';
+  return closeBracketChars.includes(character);
+}
+
+function isCompleteCheatCode(openBrackets: { [key: string]: number }, character: string): boolean {
+  return isCloseBracket(character) && matchingBracket(character) in openBrackets;
+}
+
+function matchingBracket(character: string): string {
+  switch (character) {
+    case ']':
+      return '['
+    case '}':
+      return '{'
+    case '>':
+      return '<'
+    case ')':
+      return '('
+  }
+  return ''
 }
 
 export default Grid;

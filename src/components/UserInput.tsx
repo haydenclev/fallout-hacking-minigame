@@ -1,31 +1,39 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { GameState } from "../utils";
+import { GlobalContext } from "./Context";
+
 
 interface UserInputProps {
   guessCount: number,
-  guessLimit: number,
   guessLog: string[],
   password: string,
   setGameState: (state: GameState) => void,
   setGuessCount: (count: number) => void,
   setGuessLog: (log: string[]) => void,
-  wordLength: number,
   words: string[],
+  cheatCodes: string[],
 }
 
 export default function UserInput({
   guessCount,
-  guessLimit,
   guessLog,
   password,
   setGameState,
   setGuessCount,
   setGuessLog,
-  wordLength,
   words,
+  cheatCodes,
 }: UserInputProps) {
+  const { GUESS_LIMIT, WORD_LEN } = useContext(GlobalContext)
   useEffect(() => {
-    const callbacks = addMouseInputHandling(guessCount, guessLimit, guessLog, password, setGameState, setGuessCount, setGuessLog, wordLength, words);
+    const callbacks = addGuessInputHandling(guessCount, GUESS_LIMIT, guessLog, password, setGameState, setGuessCount, setGuessLog, WORD_LEN, words);
+    return () => {
+      removeMouseInputHandling(callbacks);
+    }
+  },
+    [guessCount, guessLog]);
+  useEffect(() => {
+    const callbacks = addCheatCodeInputHandling(cheatCodes, guessLog, setGuessCount, setGuessLog);
     return () => {
       removeMouseInputHandling(callbacks);
     }
@@ -39,13 +47,13 @@ export default function UserInput({
           handleGuess(
             input.value.toLowerCase(),
             guessCount,
-            guessLimit,
+            GUESS_LIMIT,
             guessLog,
             password,
             setGameState,
             setGuessCount,
             setGuessLog,
-            wordLength,
+            WORD_LEN,
             words
           );
           (e.target as HTMLInputElement).value = '';
@@ -89,17 +97,49 @@ function handleGuess(
   return;
 }
 
-function likeness(guess: string, password: string) {
-  let similarity = 0;
-  for (let i = 0; i < guess.length; i++) {
-    if (guess[i] === password[i]) {
-      similarity++;
-    }
+function handleCheatCode(
+  cheatCode: string,
+  guessLog: string[],
+  // password: string,
+  setGuessCount: (count: number) => void,
+  setGuessLog: (log: string[]) => void,
+  // words: string[],
+) {
+  if (Math.random() >= 0.0) {
+    setGuessCount(0);
+    setGuessLog([...guessLog, cheatCode, "Allowance replenished."]);
+    const members = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
+    members.forEach(member => {
+      member.classList.remove('word-hovered', cheatCode);
+      member.replaceWith(member.cloneNode(true));
+    });
   }
-  return similarity;
+  else {
+    // TODO: remove dud
+    // setGuessLog([...guessLog, cheatCode, "Dud removed."]);
+  }
 }
 
-function addMouseInputHandling(
+
+function addCheatCodeInputHandling(
+  cheatCodes: string[],
+  guessLog: string[],
+  setGuessCount: (x: number) => void,
+  setGuessLog: (x: string[]) => void,
+) {
+  const callbacks = new Map<string, {(): void}>();
+  for (const cheatCode of cheatCodes) {
+    const members = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
+    const callback = () => handleCheatCode(cheatCode, guessLog, setGuessCount, setGuessLog);
+    callbacks.set(cheatCode, callback);
+    members.forEach(member => {
+      member.addEventListener('click', callback);
+    })
+  }
+  return callbacks;
+}
+
+function addGuessInputHandling(
   guessCount: number,
   guessLimit: number,
   guessLog: string[],
@@ -124,21 +164,29 @@ function addMouseInputHandling(
       setGuessLog,
       wordLength,
       words);
-    callbacks.set(word, callback);
-    members.forEach(member => {
-      member.addEventListener('click', callback);
-    });
+      callbacks.set(word, callback);
+      members.forEach(member => {
+        member.addEventListener('click', callback);
+      });
+    }
+    return callbacks
   }
-  return callbacks
-}
-
-function removeMouseInputHandling(
-  callbacks: Map<string, {(): void}>
-) {
-  callbacks.forEach((callback, word) => {
-    const members = document.querySelectorAll(`.${word}`);
-    members.forEach(member => {
-      member.removeEventListener('click', callback);
+  
+  function removeMouseInputHandling(callbacks: Map<string, {(): void}>) {
+    callbacks.forEach((callback, word) => {
+      const members = document.querySelectorAll(`.${CSS.escape(word)}`);
+      members.forEach(member => {
+        member.removeEventListener('click', callback);
+      });
     });
-  });
-} 
+  } 
+  
+  function likeness(guess: string, password: string) {
+    let similarity = 0;
+    for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === password[i]) {
+        similarity++;
+      }
+    }
+    return similarity;
+  }

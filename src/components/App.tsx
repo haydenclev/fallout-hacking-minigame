@@ -3,7 +3,7 @@ import JsonDictionary from '../dictionary/7_letter_words.json';
 import '../style/App.css';
 import { GameState } from '../utils';
 import { GlobalContext, verifySettings } from './Context';
-import Grid from './Grid';
+import Grid, { CheatCodes, identifyCheatCodes, makeGrid } from './Grid';
 import GuessLog from './GuessLog';
 import Header from './Header';
 import ResetButton from './ResetButton';
@@ -11,16 +11,17 @@ import UserInput from './UserInput';
 
 
 export function App() {
-  const globalSettings = useContext(GlobalContext);
-  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_ROW, WORD_LEN, GUESS_LIMIT } = globalSettings;
+  const { NUM_WORDS, TOTAL_ROWS, CHARACTERS_PER_ROW, WORD_LEN, GUESS_LIMIT } = useContext(GlobalContext);
   verifySettings(CHARACTERS_PER_ROW, NUM_WORDS, TOTAL_ROWS, WORD_LEN);
 
   const [guessLog, setGuessLog] = useState<string[]>([]);
   const [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
   const [guessCount, setGuessCount] = useState<number>(0);
-
+  
   const words = useRef(makeWords(NUM_WORDS)).current;
   const password = useRef(choosePassword(words)).current;
+  const grid: string[] = useRef(makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN)).current;
+  const cheatCodes: CheatCodes = useRef(identifyCheatCodes(grid, CHARACTERS_PER_ROW)).current;
 
   return (
     <div id="content">
@@ -28,19 +29,18 @@ export function App() {
         <div>
           <Header guessCount={guessCount} guessLimit={GUESS_LIMIT} />
           <div id="gridAndGuessLogAndInput">
-            <Grid words={words} />
+            <Grid words={words} grid={grid} cheatCodes={cheatCodes} />
             <div id="guessLogAndInput" >
               <GuessLog guessLog={guessLog} />
               <UserInput
                 guessCount={guessCount}
-                guessLimit={GUESS_LIMIT}
                 guessLog={guessLog}
                 password={password}
                 setGameState={setGameState}
                 setGuessCount={setGuessCount}
                 setGuessLog={setGuessLog}
-                wordLength={WORD_LEN}
                 words={words}
+                cheatCodes={[...cheatCodes.left, ...cheatCodes.right]}
               />
             </div>
           </div>
