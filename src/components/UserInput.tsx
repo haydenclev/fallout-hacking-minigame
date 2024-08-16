@@ -33,7 +33,7 @@ export default function UserInput({
   },
     [guessCount, guessLog]);
   useEffect(() => {
-    const callbacks = addCheatCodeInputHandling(cheatCodes, guessLog, setGuessCount, setGuessLog);
+    const callbacks = addCheatCodeInputHandling(cheatCodes, guessLog, password, setGuessCount, setGuessLog, words);
     return () => {
       removeMouseInputHandling(callbacks);
     }
@@ -100,37 +100,45 @@ function handleGuess(
 function handleCheatCode(
   cheatCode: string,
   guessLog: string[],
-  // password: string,
+  password: string,
   setGuessCount: (count: number) => void,
   setGuessLog: (log: string[]) => void,
-  // words: string[],
+  words: string[],
 ) {
-  if (Math.random() >= 0.0) {
-    setGuessCount(0);
+  if (Math.random() >= 0.5) {
     setGuessLog([...guessLog, cheatCode, "Allowance replenished."]);
-    const members = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
-    members.forEach(member => {
-      member.classList.remove('word-hovered', cheatCode);
-      member.replaceWith(member.cloneNode(true));
-    });
+    setGuessCount(0);
   }
   else {
-    // TODO: remove dud
-    // setGuessLog([...guessLog, cheatCode, "Dud removed."]);
+    setGuessLog([...guessLog, cheatCode, "Dud removed."]);
+    const dud = selectDud(password, words);
+    const dudMembers = document.querySelectorAll(`.${dud}`);
+    dudMembers.forEach(member => {
+      member.textContent = '.';
+      member.classList.remove(dud);
+      member.replaceWith(member.cloneNode(true));
+    })
   }
+  const cheatCodeMembers = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
+  cheatCodeMembers.forEach(member => {
+    member.classList.remove('word-hovered', cheatCode);
+    member.replaceWith(member.cloneNode(true));
+  });
 }
 
 
 function addCheatCodeInputHandling(
   cheatCodes: string[],
   guessLog: string[],
+  password: string,
   setGuessCount: (x: number) => void,
   setGuessLog: (x: string[]) => void,
+  words: string[],
 ) {
   const callbacks = new Map<string, {(): void}>();
   for (const cheatCode of cheatCodes) {
     const members = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
-    const callback = () => handleCheatCode(cheatCode, guessLog, setGuessCount, setGuessLog);
+    const callback = () => handleCheatCode(cheatCode, guessLog, password, setGuessCount, setGuessLog, words);
     callbacks.set(cheatCode, callback);
     members.forEach(member => {
       member.addEventListener('click', callback);
@@ -189,4 +197,12 @@ function addGuessInputHandling(
       }
     }
     return similarity;
+  }
+
+  function selectDud(password: string, words: string[]) {
+    let dud = password;
+    while (dud == password) {
+      dud = words[Math.floor(Math.random() * words.length)];
+    }
+    return dud;
   }
