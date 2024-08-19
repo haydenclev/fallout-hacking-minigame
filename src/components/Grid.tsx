@@ -37,19 +37,23 @@ export function identifyCheatCodes(grid: string[], charactersPerRow: number): Ch
     const chunk = grid.slice(i, i + charactersPerRow).join('');
     let bracketMap: { [key: string]: number } = {};
     const cheatCodeMap = new Map<string, string>();
-    for (let i = 0; i < chunk.length; i++) {
-        if (isOpenBracket(chunk[i])) {
-          if (!bracketMap[chunk[i]]) {
-            bracketMap[chunk[i]] = i;
+    for (let j = 0; j < chunk.length; j++) {
+      const character = chunk[j];
+        if (isOpenBracket(character)) {
+          if (bracketMap[character] == undefined) {
+            bracketMap[character] = j;
           }
         }
-        else if (isLetter(chunk[i])) {
-          bracketMap = {};
+        else if (isCompleteCheatCode(bracketMap, character)) {
+          const startIndex = bracketMap[matchingBracket(character)];
+          const cheatCode = chunk.slice(startIndex, j+1);
+          if (isRepeatCheatCode(cheatCode, [...halfCheatCodes, ...cheatCodes.left])) {
+            grid[i+j] = '.';
+          }
+          else { cheatCodeMap.set(character, cheatCode); }
         }
-        else if (isCompleteCheatCode(bracketMap, chunk[i])) {
-          const startIndex = bracketMap[matchingBracket(chunk[i])];
-          const cheatCode = chunk.slice(startIndex, i+1);
-          cheatCodeMap.set(chunk[i], cheatCode);
+        else if (isLetter(character)) {
+          bracketMap = {};
         }
       }
       for (const cheatCode of cheatCodeMap.values()) {
@@ -108,6 +112,9 @@ function makeAddresses(): string[] {
   return addresses;
 }
 
+function isRepeatCheatCode(cheatCode: string, cheatCodes: string[]): boolean {
+  return cheatCodes.includes(cheatCode);
+}
 
 function isOpenBracket(character: string): boolean {
   const openBracketChars = '[{<(';
