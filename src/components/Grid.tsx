@@ -33,7 +33,7 @@ function Grid({ words, grid, cheatCodes }: GridProps) {
 export function identifyCheatCodes(grid: string[], charactersPerRow: number): CheatCodes {
   const cheatCodes: CheatCodes = {left: [], right: []}
   for (let i = 0; i < grid.length; i += charactersPerRow) {
-    const chunk = grid.slice(i, i + charactersPerRow).join('');
+    let chunk = grid.slice(i, i + charactersPerRow).join('');
     let bracketMap: { [key: string]: number } = {};
     const cheatCodeMap = new Map<string, string>();
     for (let j = 0; j < chunk.length; j++) {
@@ -46,8 +46,10 @@ export function identifyCheatCodes(grid: string[], charactersPerRow: number): Ch
         else if (isCompleteCheatCode(bracketMap, character)) {
           const startIndex = bracketMap[matchingBracket(character)];
           const cheatCode = chunk.slice(startIndex, j+1);
-          if (isRepeatCheatCode(cheatCode, [...cheatCodes.left, ...cheatCodes.right])) {
+          if (isRepeatCheatCode(cheatCode, [...cheatCodes.left, ...cheatCodes.right])
+          || isOverlappingCheatCode(chunk, cheatCodeMap, bracketMap[matchingBracket(character)])) {
             grid[i+j] = '.';
+            chunk = grid.slice(i, i + charactersPerRow).join('')
           }
           else { cheatCodeMap.set(character, cheatCode); }
         }
@@ -111,6 +113,16 @@ function makeAddresses(): string[] {
 
 function isRepeatCheatCode(cheatCode: string, cheatCodes: string[]): boolean {
   return cheatCodes.includes(cheatCode);
+}
+
+function isOverlappingCheatCode(chunk: string, cheatCodeMap: Map<string, string>, startIndex: number): boolean {
+  for (const cheatCode of cheatCodeMap.values()) {
+    const endIndex = chunk.indexOf(cheatCode) + cheatCode.length;
+    if (endIndex > startIndex) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function isOpenBracket(character: string): boolean {
