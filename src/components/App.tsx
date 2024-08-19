@@ -31,7 +31,7 @@ export function App() {
           <div id="gridAndGuessLogAndInput">
             <Grid words={words} grid={grid} cheatCodes={cheatCodes} />
             <div id="guessLogAndInput" >
-              <GuessLog guessLog={guessLog} />
+              <GuessLog guessLog={guessLog} setGuessLog={setGuessLog} />
               <UserInput
                 guessCount={guessCount}
                 guessLog={guessLog}
