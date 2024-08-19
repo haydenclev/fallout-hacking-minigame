@@ -32,7 +32,6 @@ function Grid({ words, grid, cheatCodes }: GridProps) {
 
 export function identifyCheatCodes(grid: string[], charactersPerRow: number): CheatCodes {
   const cheatCodes: CheatCodes = {left: [], right: []}
-  let halfCheatCodes: string[] = [];
   for (let i = 0; i < grid.length; i += charactersPerRow) {
     const chunk = grid.slice(i, i + charactersPerRow).join('');
     let bracketMap: { [key: string]: number } = {};
@@ -47,7 +46,7 @@ export function identifyCheatCodes(grid: string[], charactersPerRow: number): Ch
         else if (isCompleteCheatCode(bracketMap, character)) {
           const startIndex = bracketMap[matchingBracket(character)];
           const cheatCode = chunk.slice(startIndex, j+1);
-          if (isRepeatCheatCode(cheatCode, [...halfCheatCodes, ...cheatCodes.left])) {
+          if (isRepeatCheatCode(cheatCode, [...cheatCodes.left, ...cheatCodes.right])) {
             grid[i+j] = '.';
           }
           else { cheatCodeMap.set(character, cheatCode); }
@@ -56,15 +55,13 @@ export function identifyCheatCodes(grid: string[], charactersPerRow: number): Ch
           bracketMap = {};
         }
       }
-      for (const cheatCode of cheatCodeMap.values()) {
-        halfCheatCodes.push(cheatCode);
+      if (i <= grid.length / 2) {
+        cheatCodes.left.push(...cheatCodeMap.values());
       }
-      if (i == grid.length / 2) {
-        cheatCodes.left = halfCheatCodes;
-        halfCheatCodes = [];
+      else {
+        cheatCodes.right.push(...cheatCodeMap.values());
       }
     }
-    cheatCodes.right = halfCheatCodes;
     return cheatCodes;
 }
 
