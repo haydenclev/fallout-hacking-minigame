@@ -81,15 +81,18 @@ function applyClassNames(
 function addInputHighlighting(inputs: string[]) {
   for (const input of inputs) {
     const members = document.querySelectorAll(`.${CSS.escape(input)}`);
-    members.forEach(member => {
-        member.addEventListener('mouseenter', () => {
-            members.forEach(m => m.classList.add('word-hovered'));
-        });
-        member.addEventListener('mouseleave', () => {
-            members.forEach(m => m.classList.remove('word-hovered'));
-        });
-    });
-  }
+    for (const member of members) {
+      member.addEventListener('mouseenter', () => {
+          members.forEach(m => m.classList.add('word-hovered'));
+      });
+      member.addEventListener('mouseleave', () => {
+          members.forEach(m => m.classList.remove('word-hovered'));
+      });
+      if (!isLetter(member.textContent)) {
+        break;
+      }
+    }
+  } 
 }
 
 function getWord(words: string[], wordCharIndex: number): string {
@@ -98,8 +101,8 @@ function getWord(words: string[], wordCharIndex: number): string {
   return words[index]
 }
 
-export function isLetter(character: string): boolean {
-  return /[a-zA-Z]/.test(character);
+export function isLetter(character: string | null): boolean {
+  return character !== null && /[a-zA-Z]/.test(character);
 }
 
 export default Memory;

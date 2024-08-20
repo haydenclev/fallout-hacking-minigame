@@ -137,12 +137,10 @@ function addCheatCodeInputHandling(
 ) {
   const callbacks = new Map<string, {(): void}>();
   for (const cheatCode of cheatCodes) {
-    const members = document.querySelectorAll(`.${CSS.escape(cheatCode)}`);
     const callback = () => handleCheatCode(cheatCode, guessLog, password, setGuessCount, setGuessLog, words);
     callbacks.set(cheatCode, callback);
-    members.forEach(member => {
-      member.addEventListener('click', callback);
-    })
+    const firstCharacter = document.querySelector(`.${CSS.escape(cheatCode)}`)
+    firstCharacter?.addEventListener('click', callback);
   }
   return callbacks;
 }
