@@ -117,8 +117,9 @@ function isRepeatCheatCode(cheatCode: string, cheatCodes: string[]): boolean {
 
 function isOverlappingCheatCode(chunk: string, cheatCodeMap: Map<string, string>, startIndex: number): boolean {
   for (const cheatCode of cheatCodeMap.values()) {
+    const sameBracketType = chunk[startIndex] == cheatCode[0];
     const endIndex = chunk.indexOf(cheatCode) + cheatCode.length;
-    if (endIndex > startIndex) {
+    if (!sameBracketType && endIndex > startIndex) {
       return true;
     }
   }

@@ -9,10 +9,12 @@ let grid = new Array<string>();
 
 beforeEach(() => {
   words = makeWords(NUM_WORDS);
-  grid = makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN);
+  grid = new Array<string>(CHARACTERS_PER_ROW * TOTAL_ROWS);
+  grid.fill('.');
 })
 
 it('puts all the words into the grid', () => {
+  grid = makeGrid(words, TOTAL_ROWS, CHARACTERS_PER_ROW, NUM_WORDS, WORD_LEN);
   const gridComponent = render(
       <Grid words={words} grid={grid} cheatCodes={{left:[], right:[]}}/>
   )
@@ -24,6 +26,13 @@ it('puts all the words into the grid', () => {
     }
     expect(text).toBe(word);
   }
+});
+
+it('correctly identifies all cheat codes', () => {
+  const line = '<<>>[(]){..}'
+  grid.splice(0, CHARACTERS_PER_ROW, ...line);
+  const cheatCodes = identifyCheatCodes(grid, CHARACTERS_PER_ROW);
+  expect([...cheatCodes.left, ...cheatCodes.right]).toEqual(expect.arrayContaining(['<<>>', '[(]', '{..}']));
 });
 
 it('removes duplicate cheat codes', () => {
